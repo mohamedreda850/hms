@@ -25,6 +25,7 @@ import Explore from "./Modules/User/Explore/Explore";
 import BookingPage from "./Modules/User/Booking/BookingPage";
 import DetailsPage from "./Modules/User/DetailsPage/DetailsPage";
 import Favorates from "./Modules/User/Favorates/Favorates";
+import ChangePassword from "./Modules/Authentication/ChangePassword/ChangePassword";
 
 function App() {
   const routes = createBrowserRouter([
@@ -65,6 +66,7 @@ function App() {
           index: true,
           element: <Dashboard />,
         },
+        
         {
           path: "rooms",
           element: <RoomsList />,
@@ -136,6 +138,10 @@ function App() {
           path: "favorites",
           element: <Favorates />,
         },
+        {
+          path:"change-password",
+          element:<ChangePassword/>
+        }
       ],
     },
   ]);
