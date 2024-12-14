@@ -1,6 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-
 import "./App.css";
 import AuthLayout from "./Modules/Authentication/AuthLayout/AuthLayout";
 import Login from "./Modules/Authentication/Login/Login";
@@ -27,126 +26,125 @@ import BookingPage from "./Modules/User/Booking/BookingPage";
 import DetailsPage from "./Modules/User/DetailsPage/DetailsPage";
 import Favorates from "./Modules/User/Favorates/Favorates";
 
-
 function App() {
   const routes = createBrowserRouter([
     {
-      path: "/",
-      element: <AuthLayout/>,
-      errorElement:<NotFound/>,
+      path: "/auth",
+      element: <AuthLayout />,
+      errorElement: <NotFound />,
       children: [
-        {
-          index: true,
-          element: <HomePage/>
-        },
+        
         {
           path: "login",
-          element: <Login/>
+          element: <Login />,
         },
         {
           path: "register",
-          element: <Register/>
+          element: <Register />,
         },
         {
-          path:"forgot-password",
-          element: <ForgotPassword/>
-        },{
-          path:"reset-password",
-          element:<ResetPassword/>
-        }
-        ]
-      },
-      {
-        path: "admin",
-        element:<AdminProtectedRoute>
-          <MasterAdminLayout/>
-        </AdminProtectedRoute>,
-        errorElement:<NotFound/>,
-        children:[
-          {
-            index:true,
-            element:<Dashboard/>
-          },
-          {
-            path:"rooms",
-            element:<RoomsList/>
-          },
-          {
-            path:"rooms/:id",
-            element:<RoomsForm/>
-          },
-          {
-            path:"rooms/newroom",
-            element:<RoomsForm/>
-          },
-          {
-            path: "facilities",
-            element: <FacilitiesList/>
-          },
-          {
-            path: "facilities/:id",
-            element:<FacilitiesForm/>
-          },
-          {
-            path: "facilities/newfacility",
-            element:<FacilitiesForm/>
-          },
-          {
-            path:"ads",
-            element:<ADSList/>
-          },
-          {
-            path:"ads/:id",
-            element:<ADSForm/>
-          },
-          {
-            path:"ads/newads",
-            element:<ADSForm/>
-          },
-          {
-            path:"booking",
-            element:<BookingList/>
-          },
-          {
-            path:'usersList',
-            element:<UsersList/>
-          }
-        ]
-      },
-      {
-        path:"users",
-        element:<UserProtectedRoute>
-          <UserMasterLayout/>
-        </UserProtectedRoute>,
-        errorElement:<NotFound/>,
-        children:[
-          {
-            index:true,
-            element:<HomePage/>
-          },
-          {
-            path:"explore-rooms",
-            element:<Explore/>
-          },
-          {
-            path:"booking-page/:id",
-            element:<BookingPage/>
-          },
-          {
-            path:"explore-rooms/:id",
-            element:<DetailsPage/>
-          },
-          {
-            path:"favorites",
-            element:<Favorates/>
-          }
-        ]
-      }
-      
+          path: "forgot-password",
+          element: <ForgotPassword />,
+        },
+        {
+          path: "reset-password",
+          element: <ResetPassword />,
+        },
+      ],
+    },
+    {
+      path: "admin",
+      element: (
+        <AdminProtectedRoute>
+          <MasterAdminLayout />
+        </AdminProtectedRoute>
+      ),
+      errorElement: <NotFound />,
+      children: [
+        {
+          index: true,
+          element: <Dashboard />,
+        },
+        {
+          path: "rooms",
+          element: <RoomsList />,
+        },
+        {
+          path: "rooms/:id",
+          element: <RoomsForm />,
+        },
+        {
+          path: "rooms/newroom",
+          element: <RoomsForm />,
+        },
+        {
+          path: "facilities",
+          element: <FacilitiesList />,
+        },
+        {
+          path: "facilities/:id",
+          element: <FacilitiesForm />,
+        },
+        {
+          path: "facilities/newfacility",
+          element: <FacilitiesForm />,
+        },
+        {
+          path: "ads",
+          element: <ADSList />,
+        },
+        {
+          path: "ads/:id",
+          element: <ADSForm />,
+        },
+        {
+          path: "ads/newads",
+          element: <ADSForm />,
+        },
+        {
+          path: "booking",
+          element: <BookingList />,
+        },
+        {
+          path: "usersList",
+          element: <UsersList />,
+        },
+      ],
+    },
+    {
+      path: "/",
+      element: <UserMasterLayout />,
+      errorElement: <NotFound />,
+      children: [
+        {
+          index: true,
+          element: <HomePage />,
+        },
+        {
+          path: "explore-rooms",
+          element: <Explore />,
+        },
+        {
+          path: "booking-page/:id",
+          element: <BookingPage />,
+        },
+        {
+          path: "explore-rooms/:id",
+          element: <DetailsPage />,
+        },
+        {
+          path: "favorites",
+          element: <Favorates />,
+        },
+      ],
+    },
   ]);
 
-  
-  return <><RouterProvider  router={routes}></RouterProvider></>;
+  return (
+    <>
+      <RouterProvider router={routes}></RouterProvider>
+    </>
+  );
 }
 
 export default App;
