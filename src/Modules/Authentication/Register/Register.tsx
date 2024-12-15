@@ -3,6 +3,8 @@ import styles from './Register.module.css';
 import image from "./../../../../src/assets/images/Group 33 (1).png";
 import imageProfile from '../../../../src/assets/images/register-image.png';
 import { Button, Stack, TextField, Typography } from "@mui/material";
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useForm } from 'react-hook-form';
 import { axiosInstanceUser, axiosInstanceUserAuth } from '../../../Services/END_POINTS/USER/URLS';
 import { AUTH_URL } from '../../../Services/END_POINTS/ADMIN/URLS';
@@ -24,7 +26,7 @@ interface RegisterData {
 
 
 export default function Register() {
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  // const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [typePassword, setTypePassword] = useState('password')
   const [typeConfirmPassword, setTypeConfirmPassword] = useState('password')
 
@@ -47,6 +49,7 @@ export default function Register() {
     formData.append('password', data.password)
     formData.append('confirmPassword', data.confirmPassword)
     formData.append('role', 'user')
+    console.log(data)
 
     try {
       const res = await axiosInstanceUserAuth.post(AUTH_URL.REGISTER, formData)
@@ -63,14 +66,7 @@ export default function Register() {
     }    
   }
 
-  // const changeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = e.target.files?.[0]
-  //   if (file) {
-  //     setValue('profileImage', file)
-  //     setImagePreview(URL.createObjectURL(file))
-  //   }
-  // }
-
+  
 
   const typeChangePassword = () => {
     if (typePassword === 'password')  setTypePassword('text') 
@@ -200,8 +196,9 @@ export default function Register() {
             })}
              />
              {typePassword === 'password' ? <button type='button' onClick={typeChangePassword}>
-                  <i className="fa-solid fa-eye-slash"></i>
-                </button> : <button type='button' onClick={typeChangePassword}><i className="fa-solid fa-eye"></i></button>}
+                  {/* <i className="fa-solid fa-eye-slash"></i> */}
+                  <VisibilityOffIcon/>
+                </button> : <button type='button' onClick={typeChangePassword}><RemoveRedEyeIcon/></button>}
             </div>    
             {errors?.password && <p style={{color:"red",fontSize:'12px'}}>{String(errors?.password?.message)}</p>}
             {/* confirmPassword  */}
@@ -219,22 +216,17 @@ export default function Register() {
             })}
              />
              {typeConfirmPassword === 'password' ? <button type='button' onClick={typeChangeConfirmPassword}>
-                  <i className="fa-solid fa-eye-slash"></i>
-                </button> : <button type='button' onClick={typeChangeConfirmPassword}><i className="fa-solid fa-eye"></i></button>}
+                  {/* <i className="fa-solid fa-eye-slash"></i> */}
+                  <VisibilityOffIcon/>
+                </button> : <button type='button' onClick={typeChangeConfirmPassword}><RemoveRedEyeIcon/></button>}
               </div>   
             {errors?.confirmPassword && <p style={{color:"red",fontSize:'12px'}}>{String(errors?.confirmPassword?.message)}</p>}
 
-                <div className='imageProfile text-center'>
-            <label htmlFor='image' style={{cursor:'pointer'}}>
-              <img src={imagePreview ? imagePreview : imageProfile} alt="" />
-            </label>
-            <input type="file" id='image' style={{display: 'none'}}
+            
+          <input type="file" 
             {...register('profileImage')}
+            
            />
-            {/* <img src={imagePreview ? imagePreview : imageProfile} alt="" /> */}
-          </div>
-            
-            
             <Button type='submit' variant="contained" size="large" disabled={isSubmitting}>
               {isSubmitting? "sign up..." : "sign up"}
             </Button>
