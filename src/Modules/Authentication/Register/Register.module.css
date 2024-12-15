@@ -1,0 +1,16 @@
+ .password {
+    position: relative;
+    
+}
+.password div{
+    width: 100%;
+    
+}
+ .password button {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    background: transparent;
+    outline: none;
+    border: none;
+}
