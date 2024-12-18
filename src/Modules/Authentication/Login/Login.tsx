@@ -28,7 +28,7 @@ export default function Login() {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<loginData>()
   const onSubmit = async (data: loginData) => {
     try {
-      const response = await axiosInstanceAdminAuth.post(AUTH_URL.LOGIN, data)
+      const response = await axiosInstanceAdminAuth.post<loginData>(AUTH_URL.LOGIN, data)
       localStorage.setItem('HMSToken', response.data.data.token)
       const token: any = response?.data?.data?.token;
       const decodedToken: any = jwtDecode(token);

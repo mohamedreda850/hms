@@ -151,6 +151,7 @@ export default function Register() {
               <TextField
               id="outlined-basic"
               label="Phone Number"
+              type='tel'
               variant="outlined"
               {...register('phoneNumber', {
                 required: 'Phone number is required',
