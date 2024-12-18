@@ -7,7 +7,7 @@ export default function AuthContextProvider(props ) {
   const [loginData, setLoginData] = useState(null);
 
   const saveLoginData = () => {
-    const decodedToken = localStorage.getItem("tokenums");
+    const decodedToken = localStorage.getItem("HMSToken");
     if (decodedToken) {
       const encodedToken = jwtDecode(decodedToken);
       setLoginData(encodedToken);
@@ -15,7 +15,7 @@ export default function AuthContextProvider(props ) {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("tokenums")) {
+    if (localStorage.getItem("HMSToken")) {
       saveLoginData();
     }
   }, []); 
