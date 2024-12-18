@@ -35,7 +35,6 @@ function App() {
       element: <AuthLayout />,
       errorElement: <NotFound />,
       children: [
-        
         {
           path: "login",
           element: <Login />,
@@ -60,7 +59,6 @@ function App() {
         <AdminProtectedRoute>
           <MasterAdminLayout />
         </AdminProtectedRoute>
-        
       ),
       errorElement: <NotFound />,
       children: [
@@ -68,7 +66,7 @@ function App() {
           index: true,
           element: <Dashboard />,
         },
-        
+
         {
           path: "rooms",
           element: <RoomsList />,
@@ -141,16 +139,16 @@ function App() {
           element: <Favorates />,
         },
         {
-          path:"change-password",
-          element:<ChangePassword/>
-        }
+          path: "change-password",
+          element: <ChangePassword />,
+        },
       ],
     },
   ]);
 
   return (
     <>
-    <ToastContainer />
+      <ToastContainer />
       <RouterProvider router={routes}></RouterProvider>
     </>
   );
