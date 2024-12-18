@@ -28,7 +28,6 @@ interface ResetPasswordFormData {
 }
 
 export default function ResetPassword() {
-  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
@@ -37,15 +36,14 @@ export default function ResetPassword() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     getValues, // To validate confirm password
   } = useForm<ResetPasswordFormData>();
 
   // The function to handle form submission
   const onSubmit: SubmitHandler<ResetPasswordFormData> = async (data) => {
-    setLoading(true);
     try {
-      const response = await axiosInstanceAdmin.post(
+      const response = await axiosInstanceAdmin.post<ResetPasswordFormData>(
         AUTH_URL.RESET_PASSWORD,
         data
       );
@@ -55,7 +53,6 @@ export default function ResetPassword() {
       console.error("Error during OTP submission:", error);
       toast.error(error.response?.data?.message || "Something went wrong!");
     } finally {
-      setLoading(false);
     }
   };
 
@@ -262,9 +259,9 @@ export default function ResetPassword() {
               variant="contained"
               size="large"
               type="submit"
-              disabled={loading}
+              disabled={isSubmitting}
             >
-              {loading ? "Processing..." : "Reset"}
+              {isSubmitting ? "Processing..." : "Reset"}
             </Button>
           </Stack>
         </Stack>
@@ -272,8 +269,9 @@ export default function ResetPassword() {
         {/* Image Section */}
         <Stack
           sx={{
-            width: { xs: "100%", sm: "50%" }, // Use sx for responsive width
+            width: { xs: "100%", sm: "50%" },
           }}
+          className={styles.imagecontainer}
         >
           <img
             src={image}
@@ -281,10 +279,14 @@ export default function ResetPassword() {
               width: "100%",
               height: "97vh",
               objectFit: "fill",
-              borderRadius: "10px ",
+              borderRadius: "10px",
             }}
             alt="Reset Password"
           />
+          <div className={styles.imagetext}>
+            <div className={styles.imgtextone}>Reset Password</div>
+            <div className={styles.imgtexttwo}>Homes as unique as new</div>
+          </div>
         </Stack>
       </Stack>
     </div>

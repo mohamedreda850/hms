@@ -1,0 +1,45 @@
+:root {
+  --white-color: #ffffff;
+  --light-gray: #d4d2d2;
+  --gray-border: #ccc;
+  --dark-gray: #f8f9fb;
+  --text-color: #000000;
+}
+/* Custom dropdown menu styles */
+.dropdownMenu {
+  position: absolute;
+  background-color: var(--white-color);
+  border: 1px solid var(--gray-border);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  min-width: 150px;
+  z-index: 1000;
+  top: 1px;
+  right: 120px;
+  padding: 5px 0;
+}
+
+/* Style for each menu item */
+.menuItem {
+  padding: 10px;
+  color: var(--text-color);
+  cursor: pointer;
+  text-align: center;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+/* Hover effect for menu items */
+.menuItem:hover {
+  background-color: var(--light-gray);
+}
+
+/* Remove the last item border */
+.menuItem:last-child {
+  background-color: var(--dark-gray);
+}
+
+.menuItem:last-child:hover {
+  background-color: var(--light-gray);
+}

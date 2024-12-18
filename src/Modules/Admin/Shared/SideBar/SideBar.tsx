@@ -1,9 +1,3 @@
-
-
 export default function SideBar() {
-  return (
-   
-    <h1>sidebar</h1>
- 
-  )
+  return <h1>sidebar</h1>;
 }
