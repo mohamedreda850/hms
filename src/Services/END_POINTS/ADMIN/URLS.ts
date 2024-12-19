@@ -15,6 +15,7 @@ export const AUTH_URL = {
   FORGOT_PASSWORD : "/users/forgot-password",
   RESET_PASSWORD: "users/reset-password",
   CHANGE_PASSWORD: "/users/change-password",
+  USER_Profile:(id:string)=> `/users/${id}`,
 };
 //ADD Users URLS 
 export const USERS_URL={

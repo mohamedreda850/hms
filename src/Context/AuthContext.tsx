@@ -7,12 +7,14 @@ export const AuthContext = createContext(null);
 export default function AuthContextProvider(props ) {
   const [loginData, setLoginData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState(true);
+
   const saveLoginData = () => {
     const decodedToken = localStorage.getItem("HMSToken");
     
       const encodedToken = jwtDecode(decodedToken);
       setLoginData(encodedToken);
-    
+    setUserId(encodedToken._id);
   };
 
   useEffect(() => {
@@ -28,6 +30,7 @@ export default function AuthContextProvider(props ) {
         const encodedToken = jwtDecode(token);
         const rolet = encodedToken?.role;
         setLoginData({ role: `${rolet =='admin' ? 'admin':"user"}` }); 
+        setUserId(encodedToken._id);
         setLoading(false);
       }, 1000);
     } else {
@@ -35,7 +38,7 @@ export default function AuthContextProvider(props ) {
     }
   }, []);
   return (
-    <AuthContext.Provider value={{ loginData, saveLoginData,loading }}>
+    <AuthContext.Provider value={{userId, loginData, saveLoginData,loading }}>
       {props.children}
     </AuthContext.Provider>
   );
