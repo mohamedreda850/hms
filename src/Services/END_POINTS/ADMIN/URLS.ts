@@ -17,6 +17,13 @@ export const AUTH_URL = {
   CHANGE_PASSWORD: "/users/change-password",
   USER_Profile:(id:string)=> `/users/${id}`,
 };
+//ADD Users URLS 
+export const USERS_URL={
+  GET_ALL_USERS: "/users",
+
+}
+
+
 export const ROOMS_URLS = {
   ADD_ROOM: "/rooms",
   GET_ROOM: (id: string) => `/rooms/${id}`,
