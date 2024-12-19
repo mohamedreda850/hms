@@ -12,7 +12,7 @@ import NotFound from "./Modules/Admin/Shared/NotFound/NotFound";
 import Dashboard from "./Modules/Admin/Dashboard/Dashboard";
 import RoomsList from "./Modules/Admin/Rooms/RoomsList/RoomsList";
 import RoomsForm from "./Modules/Admin/Rooms/RoomsForm/RoomsForm";
-import FacilitiesList from "./Modules/Admin/Facilities/FacilitiesForm/FacilitiesForm";
+import FacilitiesList from "./Modules/Admin/Facilities/FacilitiesList/FacilitiesList";
 import FacilitiesForm from "./Modules/Admin/Facilities/FacilitiesForm/FacilitiesForm";
 import ADSList from "./Modules/Admin/ADS/ADSList/ADSList";
 import ADSForm from "./Modules/Admin/ADS/ADSForm/ADSForm";
@@ -110,6 +110,10 @@ function App() {
         {
           path: "usersList",
           element: <UsersList />,
+        },
+        {
+          path: "change-password",
+          element: <ChangePassword />,
         },
       ],
     },
