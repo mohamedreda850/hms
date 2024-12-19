@@ -26,6 +26,7 @@ import BookingPage from "./Modules/User/Booking/BookingPage";
 import DetailsPage from "./Modules/User/DetailsPage/DetailsPage";
 import Favorates from "./Modules/User/Favorates/Favorates";
 import ChangePassword from "./Modules/Authentication/ChangePassword/ChangePassword";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const routes = createBrowserRouter([
@@ -34,7 +35,6 @@ function App() {
       element: <AuthLayout />,
       errorElement: <NotFound />,
       children: [
-        
         {
           path: "login",
           element: <Login />,
@@ -54,7 +54,7 @@ function App() {
       ],
     },
     {
-      path: "admin",
+      path: "/admin",
       element: (
         <AdminProtectedRoute>
           <MasterAdminLayout />
@@ -66,7 +66,7 @@ function App() {
           index: true,
           element: <Dashboard />,
         },
-        
+
         {
           path: "rooms",
           element: <RoomsList />,
@@ -139,15 +139,16 @@ function App() {
           element: <Favorates />,
         },
         {
-          path:"change-password",
-          element:<ChangePassword/>
-        }
+          path: "change-password",
+          element: <ChangePassword />,
+        },
       ],
     },
   ]);
 
   return (
     <>
+      <ToastContainer />
       <RouterProvider router={routes}></RouterProvider>
     </>
   );
