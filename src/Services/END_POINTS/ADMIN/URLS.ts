@@ -16,6 +16,13 @@ export const AUTH_URL = {
   RESET_PASSWORD: "users/reset-password",
   CHANGE_PASSWORD: "/users/change-password",
 };
+//ADD Users URLS 
+export const USERS_URL={
+  GET_ALL_USERS: "/users",
+
+}
+
+
 export const ROOMS_URLS = {
   ADD_ROOM: "/rooms",
   GET_ROOM: (id: string) => `/rooms/${id}`,
