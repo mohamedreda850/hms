@@ -1,9 +1,9 @@
-import { Container } from "@mui/material";
+
 import styles from "./ForgotPassword.module.css";
 import Stack from "@mui/material/Stack";
 import ForgotPassImg from "./ForgotPassImg";
-import ForgotInput from "./ForgotInput";
-import ForgotTitle from './ForgotTitle';
+import ForgotInput from "./ForgotInput.tsx";
+import ForgotTitle from './ForgotTitle.tsx';
 
 export default function ForgotPassword() {
   return (
@@ -37,7 +37,7 @@ export default function ForgotPassword() {
           </Stack>
 
           <Stack
-            component="form"
+            
             direction="column"
             spacing={3}
             sx={{
@@ -52,21 +52,7 @@ export default function ForgotPassword() {
         </Stack>
         <ForgotPassImg />
       </Stack>
-        {/* <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={{ xs: 1, sm: 2, md: 10 }}
-          justifyContent={"end"}
-        >
-          <div>
-            <div>
-           <ForgotTitle/>
-            </div>
-            <ForgotInput />
-          </div>
-          
-            <ForgotPassImg />
-          
-        </Stack> */}
+        
     </>
   );
 }
