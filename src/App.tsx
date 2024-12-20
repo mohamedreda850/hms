@@ -27,6 +27,7 @@ import DetailsPage from "./Modules/User/DetailsPage/DetailsPage";
 import Favorates from "./Modules/User/Favorates/Favorates";
 import ChangePassword from "./Modules/Authentication/ChangePassword/ChangePassword";
 import { ToastContainer } from "react-toastify";
+import DeleteConfirmation from "./Modules/Admin/Shared/DeleteConfirmation/DeleteConfirmation";
 
 function App() {
   const routes = createBrowserRouter([
@@ -115,6 +116,7 @@ function App() {
           path: "change-password",
           element: <ChangePassword />,
         },
+       
       ],
     },
     {
