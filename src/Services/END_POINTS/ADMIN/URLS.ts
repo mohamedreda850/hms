@@ -51,6 +51,6 @@ export const ADS_URLS = {
     UPDATE_ADS: (id: string) => `/ads/${id}`,
     DELETE_ADS: (id: string) => `/ads/${id}`,
 }
-export const Dashboard_URLS = {
+export const DASHBOARD_URLS = {
     GET_DASHBOARD: "/dashboard",
 }
