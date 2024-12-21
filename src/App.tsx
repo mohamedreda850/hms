@@ -12,7 +12,7 @@ import NotFound from "./Modules/Admin/Shared/NotFound/NotFound";
 import Dashboard from "./Modules/Admin/Dashboard/Dashboard";
 import RoomsList from "./Modules/Admin/Rooms/RoomsList/RoomsList";
 import RoomsForm from "./Modules/Admin/Rooms/RoomsForm/RoomsForm";
-import FacilitiesList from "./Modules/Admin/Facilities/FacilitiesForm/FacilitiesForm";
+import FacilitiesList from "./Modules/Admin/Facilities/FacilitiesList/FacilitiesList";
 import FacilitiesForm from "./Modules/Admin/Facilities/FacilitiesForm/FacilitiesForm";
 import ADSList from "./Modules/Admin/ADS/ADSList/ADSList";
 import ADSForm from "./Modules/Admin/ADS/ADSForm/ADSForm";
@@ -26,6 +26,8 @@ import BookingPage from "./Modules/User/Booking/BookingPage";
 import DetailsPage from "./Modules/User/DetailsPage/DetailsPage";
 import Favorates from "./Modules/User/Favorates/Favorates";
 import ChangePassword from "./Modules/Authentication/ChangePassword/ChangePassword";
+import { ToastContainer } from "react-toastify";
+import DeleteConfirmation from "./Modules/Admin/Shared/DeleteConfirmation/DeleteConfirmation";
 
 function App() {
   const routes = createBrowserRouter([
@@ -34,7 +36,6 @@ function App() {
       element: <AuthLayout />,
       errorElement: <NotFound />,
       children: [
-        
         {
           path: "login",
           element: <Login />,
@@ -54,7 +55,7 @@ function App() {
       ],
     },
     {
-      path: "admin",
+      path: "/admin",
       element: (
         <AdminProtectedRoute>
           <MasterAdminLayout />
@@ -66,7 +67,7 @@ function App() {
           index: true,
           element: <Dashboard />,
         },
-        
+
         {
           path: "rooms",
           element: <RoomsList />,
@@ -111,6 +112,11 @@ function App() {
           path: "usersList",
           element: <UsersList />,
         },
+        {
+          path: "change-password",
+          element: <ChangePassword />,
+        },
+       
       ],
     },
     {
@@ -139,15 +145,16 @@ function App() {
           element: <Favorates />,
         },
         {
-          path:"change-password",
-          element:<ChangePassword/>
-        }
+          path: "change-password",
+          element: <ChangePassword />,
+        },
       ],
     },
   ]);
 
   return (
     <>
+      <ToastContainer />
       <RouterProvider router={routes}></RouterProvider>
     </>
   );

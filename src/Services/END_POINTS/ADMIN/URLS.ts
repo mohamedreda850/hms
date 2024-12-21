@@ -15,7 +15,15 @@ export const AUTH_URL = {
   FORGOT_PASSWORD : "/users/forgot-password",
   RESET_PASSWORD: "users/reset-password",
   CHANGE_PASSWORD: "/users/change-password",
+  USER_Profile:(id:string)=> `/users/${id}`,
 };
+//ADD Users URLS 
+export const USERS_URL={
+  GET_ALL_USERS: "/users",
+
+}
+
+
 export const ROOMS_URLS = {
   ADD_ROOM: "/rooms",
   GET_ROOM: (id: string) => `/rooms/${id}`,
@@ -43,6 +51,6 @@ export const ADS_URLS = {
     UPDATE_ADS: (id: string) => `/ads/${id}`,
     DELETE_ADS: (id: string) => `/ads/${id}`,
 }
-export const Dashboard_URLS = {
+export const DASHBOARD_URLS = {
     GET_DASHBOARD: "/dashboard",
 }
