@@ -13,7 +13,7 @@ export const AUTH_URL = {
   LOGIN: "/users/login",
   REGISTER: "/users",
   FORGOT_PASSWORD : "/users/forgot-password",
-  RESET_PASSWORD: "users/reset-password",
+  RESET_PASSWORD: "/users/reset-password",
   CHANGE_PASSWORD: "/users/change-password",
   USER_Profile:(id:string)=> `/users/${id}`,
 };

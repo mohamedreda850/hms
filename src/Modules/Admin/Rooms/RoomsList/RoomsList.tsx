@@ -9,7 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useEffect, useState } from 'react';
 import { axiosInstanceAdmin, ROOMS_URLS } from '../../../../Services/END_POINTS/ADMIN/URLS';
-import { Button, Pagination, Stack, TextField, Typography } from '@mui/material';
+import { Button, InputLabel, Pagination, Select, SelectChangeEvent, Stack, TextField, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -20,6 +20,8 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 import { toast } from 'react-toastify';
 import DeleteConfirmation from '../../Shared/DeleteConfirmation/DeleteConfirmation';
+import { set } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -56,35 +58,36 @@ interface roomData {
 }
 
 
-type PageNumber = number[]
+
 
 
 
 export default function RoomsList() {
-
+const navigate = useNavigate();
   const [roomsList, setRoomsList] = useState([]);
-  const [pageNumber, setPageNumber] = useState<PageNumber>([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
   const [selectedIdRoom, setSelectedIdRoom] = useState('');
 
+  const handlePageChange = async (event: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
+    await getAllRooms(pageSize, page);
+   
+  };
 
-
-
-
-
-
-
-
-  const getAllRooms = async (pageSize: number, pageNumber: number, numberaRoom?: string) => {
-    // if (projectsList.length > 0) setLoad(false)
+const getAllRooms = async (pageSize: number, currentPage: number) => {
+   
 
     try {
       const res = await axiosInstanceAdmin.get(ROOMS_URLS.GET_ALL_ROOMS,
-        { params: { pageSize: pageSize, pageNumber: pageNumber, numberaRoom: numberaRoom } })
+        { params: { size: pageSize, page: currentPage }, })
       console.log(res.data.data.rooms);
       setRoomsList(res?.data?.data?.rooms);
 
-      // setLoad(false)
-      setPageNumber(Array(res?.data?.totalNumberOfPages).fill().map((_, i) => i + 1))
+      const totalCount = res?.data?.data?.totalCount || 0;
+      setTotalPages(Math.ceil(totalCount / pageSize));
+
     } catch (error) {
       console.log(error);
     }
@@ -94,20 +97,10 @@ export default function RoomsList() {
     try {
 
       let response = await axiosInstanceAdmin.delete(ROOMS_URLS.DELETE_ROOM(selectedIdRoom));
-
-
       toast?.success('Item deleted successfuly');
-
-
       console.log(response)
-
-
-      getAllRooms(2, 1);
-
-
+      getAllRooms(pageSize, currentPage);
       handleCloseModal()
-
-
     } catch (error) {
 
       console.log(error);
@@ -119,7 +112,7 @@ export default function RoomsList() {
   };
 
   useEffect(() => {
-    getAllRooms(2, 1);
+    getAllRooms(pageSize, currentPage);
 
   }, []);
 
@@ -138,13 +131,14 @@ export default function RoomsList() {
     setopenModal(true);
   }
   const handleCloseModal = () => setopenModal(false);
+
   return (
     <>
       <DeleteConfirmation deleteItem={"Room"} deleteFunction={deleteRoom} handleClose={handleCloseModal} open={openModal} />
       <Stack
         direction="column"
       >
-
+      
         <Stack
           direction="row"
           sx={{
@@ -155,7 +149,7 @@ export default function RoomsList() {
           <Typography variant="h5" gutterBottom>
             Rooms Table Details
           </Typography>
-          <Button type='submit' variant="contained" size="large" >
+          <Button  variant="contained" onClick={()=>navigate("/admin/rooms/newroom")} size="large" >
             Add New Room
           </Button>
         </Stack>
@@ -179,7 +173,7 @@ export default function RoomsList() {
                     {room.roomNumber}
                   </StyledTableCell>
                   <StyledTableCell align="right">
-                    {room.images ? <img className='w-25 h-25' style={{ width: "20%" }} src={`${room.images[0]}`} alt='' /> : ''}
+                    {room.images ? <img  style={{ width: "60px" , height:"60px"}} src={`${room.images[0]}`} alt='' /> : ''}
                   </StyledTableCell>
                   <StyledTableCell align="right">{room.price}</StyledTableCell>
                   <StyledTableCell align="right">{room.discount}</StyledTableCell>
@@ -230,8 +224,14 @@ export default function RoomsList() {
           </Table>
         </TableContainer>
         <Stack>
-          <Stack spacing={4}>
-            <Pagination count={pageNumber.length} variant="outlined" shape="rounded" />
+          <Stack spacing={4} sx={{marginTop: "2rem", justifyContent: "center", alignItems: "center"}}>
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              variant="outlined"
+              shape="rounded"
+            />
           </Stack>
         </Stack>
       </Stack>

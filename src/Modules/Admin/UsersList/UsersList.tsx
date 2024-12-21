@@ -11,6 +11,7 @@ import {
   TableRow,
   Paper,
   Skeleton,
+  Pagination,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Visibility } from '@mui/icons-material';
@@ -34,11 +35,15 @@ export default function UsersList() {
 
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  const getUsersList = async () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const pageSize = 10;
+  const getUsersList = async (pageSize: number, currentPage: number) => {
     try {
-      const res = await axiosInstanceAdmin.get(USERS_URL.GET_ALL_USERS);
+      const res = await axiosInstanceAdmin.get(USERS_URL.GET_ALL_USERS, { params: { size: pageSize, page: currentPage }});
       setUsers(res.data.data.users);
+      const totalCount = res?.data?.data?.totalCount || 0;
+      setTotalPages(Math.ceil(totalCount / pageSize));
     } catch (error) {
       console.error('Error fetching users:', error);
     } finally {
@@ -47,9 +52,13 @@ export default function UsersList() {
   };
 
   useEffect(() => {
-    getUsersList();
+    getUsersList(pageSize, currentPage);
   }, []);
-
+  const handlePageChange = async (event: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
+    await getUsersList(pageSize, page);
+   
+  };
   const StyledTableCell = styled(TableCell)(() => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: 'rgba(226, 229, 235, 1)',
@@ -107,16 +116,16 @@ export default function UsersList() {
 
       <Box sx={{ overflowX: 'auto' }}>
         <TableContainer component={Paper} sx={{ boxShadow: 'none', border: 'none' }}>
-        <Table
-      sx={{
-        minWidth: 700,
-        borderCollapse: 'collapse',    
-        '& td, & th': {
-          border: 'none', 
-        },
-      }}
-      aria-label="customized table"
-    >
+          <Table
+            sx={{
+              minWidth: 700,
+              borderCollapse: 'collapse',
+              '& td, & th': {
+                border: 'none',
+              },
+            }}
+            aria-label="customized table"
+          >
             <TableHead>
               <TableRow>
                 <StyledTableCell align="center">User Name</StyledTableCell>
@@ -133,32 +142,41 @@ export default function UsersList() {
               {isLoading
                 ? renderSkeletonRows()
                 : users.map((user) => (
-                    <StyledTableRow key={user._id}>
-                      <StyledTableCell align="center">{user.userName}</StyledTableCell>
-                      <StyledTableCell align="center">{user.email}</StyledTableCell>
-                      <StyledTableCell align="center">{user.phoneNumber}</StyledTableCell>
-                      <StyledTableCell align="center">{user.country}</StyledTableCell>
-                      <StyledTableCell align="center">{user.role}</StyledTableCell>
-                      <StyledTableCell align="center">{formatDate(user.createdAt)}</StyledTableCell>
-                      <StyledTableCell align="center">
-                        <img
-                          src={user.profileImage || '/path/to/placeholder.jpg'}
-                          alt={user.userName}
-                          style={{ width: 50, height: 50, borderRadius: '50%' }}
-                        />
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        <Visibility
-                          sx={{ cursor: 'pointer', color: '#1976d2' }}
-                          onClick={() => handleViewDetails(user._id)}
-                        />
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  ))}
+                  <StyledTableRow key={user._id}>
+                    <StyledTableCell align="center">{user.userName}</StyledTableCell>
+                    <StyledTableCell align="center">{user.email}</StyledTableCell>
+                    <StyledTableCell align="center">{user.phoneNumber}</StyledTableCell>
+                    <StyledTableCell align="center">{user.country}</StyledTableCell>
+                    <StyledTableCell align="center">{user.role}</StyledTableCell>
+                    <StyledTableCell align="center">{formatDate(user.createdAt)}</StyledTableCell>
+                    <StyledTableCell align="center">
+                      <img
+                        src={user.profileImage || '/path/to/placeholder.jpg'}
+                        alt={user.userName}
+                        style={{ width: 50, height: 50, borderRadius: '50%' }}
+                      />
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      <Visibility
+                        sx={{ cursor: 'pointer', color: '#1976d2' }}
+                        onClick={() => handleViewDetails(user._id)}
+                      />
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>
       </Box>
+      <Stack spacing={4} sx={{ marginTop: "2rem", justifyContent: "center", alignItems: "center" }}>
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          onChange={handlePageChange}
+          variant="outlined"
+          shape="rounded"
+        />
+      </Stack>
     </Stack>
   );
 }

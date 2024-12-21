@@ -97,7 +97,7 @@ export default function Login() {
               type="email"
               error={!!errors.email}
               helperText={errors.email?.message}
-              {...register('email',)}
+              {...register('email',EMAIL_VALIDATION)}
             >
             </TextField>
             <TextField
@@ -107,7 +107,7 @@ export default function Login() {
               type={isPasswordVisable ? "text" : "password"}
               helperText={errors.email?.message}
 
-              {...register('password')}
+              {...register('password', PASWORD_VALIDATION)}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="start">

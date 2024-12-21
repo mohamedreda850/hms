@@ -12,6 +12,7 @@ import {
   Paper,
   Skeleton,
   Alert,
+  Pagination,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Visibility } from '@mui/icons-material';
@@ -42,12 +43,15 @@ export default function BookingList() {
   const [booking, setBooking] = useState<Booking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const getBookingList = async () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const pageSize = 10;
+  const getBookingList = async (pageSize: number, currentPage: number) => {
     try {
-      const response = await axiosInstanceAdmin.get<Booking[]>(BOOKING_URLS.GET_ALL_booking);
+      const response = await axiosInstanceAdmin.get<Booking[]>(BOOKING_URLS.GET_ALL_booking, { params: { size: pageSize, page: currentPage }, });
       setBooking(response.data.data.booking);
-    
+      const totalCount = response?.data?.data?.totalCount || 0;
+      setTotalPages(Math.ceil(totalCount / pageSize));
     } catch (err) {
       console.error('Error fetching bookings:', err);
       setError('Failed to load booking data. Please try again later.');
@@ -57,7 +61,7 @@ export default function BookingList() {
   };
 
   useEffect(() => {
-    getBookingList();
+    getBookingList(pageSize, currentPage);
   }, []);
 
   const StyledTableCell = styled(TableCell)(() => ({
@@ -90,6 +94,11 @@ export default function BookingList() {
 
   const handleViewDetails = (bookingId: string) => {
     navigate(`/booking-details/${bookingId}`);
+  };
+  const handlePageChange = async (event: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
+    await getBookingList(pageSize, page);
+   
   };
 
   const renderSkeletonRows = () =>
@@ -170,6 +179,15 @@ export default function BookingList() {
           </Table>
         </TableContainer>
       </Box>
+      <Stack spacing={4} sx={{marginTop: "2rem", justifyContent: "center", alignItems: "center"}}>
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              variant="outlined"
+              shape="rounded"
+            />
+          </Stack>
     </Stack>
   );
 }

@@ -13,13 +13,13 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast} from "react-toastify";
-import { AUTH_URL, axiosInstanceAdminAuth } from "../../../Services/END_POINTS/ADMIN/URLS";
+import { AUTH_URL, axiosInstanceAdmin } from "../../../Services/END_POINTS/ADMIN/URLS";
 
 
 interface ChangeData {
   oldPassword: string;
   newPassword: string;
-  confirmNewPassword: string;
+  confirmPassword: string;
 }
 
 export default function ChangePassword() {
@@ -35,12 +35,12 @@ export default function ChangePassword() {
     watch,
   } = useForm<ChangeData>();
 
-  const onSubmit: SubmitHandler<ChangeData> = async (data) => {
+  const onSubmit: SubmitHandler<ChangeData> = async (data:ChangeData) => {
     try {
-      const res = await axiosInstanceAdminAuth.put(AUTH_URL.CHANGE_PASSWORD, data)
+      const res = await axiosInstanceAdmin.post(AUTH_URL.CHANGE_PASSWORD, data)
       console.log(res)
       toast.success("Password changed!");
-
+     
       navigate("/auth/login");
     } catch (error: any) {
       console.log(error)
@@ -118,13 +118,13 @@ export default function ChangePassword() {
                   type={typeConfirmPassword}
                   fullWidth
                   required
-                  {...register("confirmNewPassword", {
+                  {...register("confirmPassword", {
                     required: "Please confirm your new password",
                     validate: (value) =>
                       value === watch("newPassword") || "Passwords do not match",
-                  })}
-                  error={!!errors.confirmNewPassword}
-                  helperText={errors.confirmNewPassword?.message}
+                  })}             
+                  error={!!errors.confirmPassword}
+                  helperText={errors.confirmPassword?.message}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
