@@ -45,6 +45,7 @@ export default function RoomsForm() {
     handleSubmit,
     formState: { errors, isSubmitting },
     setValue,
+    watch
   } = useForm();
   const onSubmit = async (data) => {
 
@@ -64,7 +65,7 @@ export default function RoomsForm() {
     formData.append("imgs", data.imgs[0]);
 
 
-    console.log("Form Data:", data);
+   
     try {
       const res = await axiosInstanceAdmin[params.id ? 'put' : 'post'](
         params.id ?
@@ -73,7 +74,7 @@ export default function RoomsForm() {
           ROOMS_URLS.ADD_ROOM
         , formData
       )
-      console.log(res);
+      
       navigate("/admin/rooms")
 
     } catch (error) {
@@ -86,10 +87,10 @@ export default function RoomsForm() {
     const { data } = await axiosInstanceAdmin.get(ROOMS_URLS.GET_ROOM(id))
     console.log(data);
 
-    setValue("roomNumber", data?.roomNumber)
-    setValue("price", data?.price)
-    setValue("capacity", data?.capacity)
-    setValue("discount", data?.discount)
+    setValue("roomNumber", data?.data?.room.roomNumber)
+    setValue("price", data?.data?.room.price)
+    setValue("capacity", data?.data?.room.capacity)
+    setValue("discount", data?.data?.room.discount)
 
 
 
@@ -97,7 +98,7 @@ export default function RoomsForm() {
   const getFacilities = async () => {
     try {
       const response = await axiosInstanceAdmin.get(FACILITIES_URLS.GET_ALL_FACILITIES)
-      console.log(" facility ", response.data.data.facilities)
+      
       setFacilities(response.data.data.facilities)
     } catch (error) {
       console.log(error);
@@ -109,9 +110,11 @@ export default function RoomsForm() {
   useEffect(() => {
     (async () => {
       await getFacilities()
-      console.log(facilities);
+      
 
       if (params.id) {
+        console.log(params.id);
+        
         await getRoom(params.id);
       }
     })();
@@ -138,6 +141,7 @@ export default function RoomsForm() {
             label="Room Number"
             variant="outlined"
             type="text"
+            value={watch("roomNumber") || ""}
             error={!!errors.roomNumber}
             helperText={errors.roomNumber?.message}
             {...register("roomNumber", {
@@ -160,6 +164,7 @@ export default function RoomsForm() {
             label="Price"
             variant="outlined"
             type="number"
+            value={watch("price") || ""}
             error={!!errors.price}
             helperText={errors.price?.message}
             sx={{
@@ -174,6 +179,7 @@ export default function RoomsForm() {
             label="Capacity"
             variant="outlined"
             type="number"
+            value={watch("capacity") || ""}
             error={!!errors.capacity}
             helperText={errors.capacity?.message}
             sx={{
@@ -199,6 +205,7 @@ export default function RoomsForm() {
             label="Discount"
             variant="outlined"
             type="text"
+            value={watch("discount") || ""}
             error={!!errors.discount}
             helperText={errors.discount?.message}
             sx={{
@@ -209,7 +216,7 @@ export default function RoomsForm() {
             })}
           />
 
-          <Box sx={{ minWidth: 120 }}>
+          
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Facilities</InputLabel>
               <Select
@@ -220,7 +227,7 @@ export default function RoomsForm() {
                 label="Age"
                 multiple
                 onChange={handleChange}
-
+                sx={{width: "100%"}}
               >
                 {facilities?.map(({ _id, name }) => (
                   <MenuItem key={_id} value={_id}>{name}</MenuItem>
@@ -229,7 +236,7 @@ export default function RoomsForm() {
 
               </Select>
             </FormControl>
-          </Box>
+          
 
 
 
@@ -247,10 +254,10 @@ export default function RoomsForm() {
             tabIndex={-1}
             startIcon={<CloudUploadIcon />}
           >
-            Upload files
+            Upload image
             <VisuallyHiddenInput
               type="file"
-              {...register('imgs')}
+              {...register('imgs',{required: "image is required"})}
               onChange={(event) => console.log(event.target.files)}
               multiple
 
