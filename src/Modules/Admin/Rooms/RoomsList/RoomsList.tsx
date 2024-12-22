@@ -121,8 +121,9 @@ const getAllRooms = async (pageSize: number, currentPage: number) => {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handleClose = (id) => {
     setAnchorEl(null);
+    navigate(`/admin/rooms/${id}`)
   };
   const ITEM_HEIGHT = 48;
   const [openModal, setopenModal] = useState(false);
@@ -211,7 +212,7 @@ const getAllRooms = async (pageSize: number, currentPage: number) => {
                         <MenuItem onClick={() => handleOpen(room._id)}>
                           delete<DeleteIcon color='primary' />
                         </MenuItem>
-                        <MenuItem onClick={handleClose}>
+                        <MenuItem onClick={()=>handleClose(room._id)}>
                           update<OpenInNewIcon color='primary' />
                         </MenuItem>
 

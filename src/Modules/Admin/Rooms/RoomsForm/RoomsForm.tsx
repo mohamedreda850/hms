@@ -1,14 +1,28 @@
 import styles from "./RoomsForm.module.css";
-import { Box, Divider, FormControl,  Select, SelectChangeEvent, Stack } from "@mui/material";
+import { Box, Divider, FormControl, Select, SelectChangeEvent, Stack } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useContext, useEffect, useState } from "react";
 import { axiosInstanceAdmin, FACILITIES_URLS, ROOMS_URLS } from "../../../../Services/END_POINTS/ADMIN/URLS";
+import { styled } from '@mui/material/styles';
 
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
+
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
 
 
 export default function RoomsForm() {
@@ -25,7 +39,7 @@ export default function RoomsForm() {
   };
   const navigate = useNavigate();
   const [facilities, setFacilities] = useState([])
-  const params= useParams()
+  const params = useParams()
   const {
     register,
     handleSubmit,
@@ -39,67 +53,69 @@ export default function RoomsForm() {
     formData.append("price", data?.price);
     formData.append("capacity", data?.capacity);
     formData.append("discount", data?.discount);
-  
-  
+
+
     facilitySelect.forEach((facilityId) =>
       formData.append("facilities[]", facilityId)
     );
-  
-    
 
-      formData.append("imgs", data.imgs[0]);  
-    
-  
+
+
+    formData.append("imgs", data.imgs[0]);
+
+
     console.log("Form Data:", data);
     try {
-        await axiosInstanceAdmin[params.id?'put':'post'](
-      params.id?
-        ROOMS_URLS.UPDATE_ROOM(params.id)
-        :
-        ROOMS_URLS.ADD_ROOM
-      ,formData
-    )
-   
+      const res = await axiosInstanceAdmin[params.id ? 'put' : 'post'](
+        params.id ?
+          ROOMS_URLS.UPDATE_ROOM(params.id)
+          :
+          ROOMS_URLS.ADD_ROOM
+        , formData
+      )
+      console.log(res);
+      navigate("/admin/rooms")
+
     } catch (error) {
       console.log(error);
-      
-    }
-  
-  };
-  const getRoom =async(id:string)=>{
-    const {data}=await axiosInstanceAdmin.get(ROOMS_URLS.GET_ROOM(id))
-    console.log(data);
-    
-    setValue("roomNumber",data?.roomNumber)
-    setValue("price",data?.price)
-    setValue("capacity",data?.capacity)
-    setValue("discount",data?.discount)
-    
-   
 
-   }   
-   const getFacilities =async()=>{
+    }
+
+  };
+  const getRoom = async (id: string) => {
+    const { data } = await axiosInstanceAdmin.get(ROOMS_URLS.GET_ROOM(id))
+    console.log(data);
+
+    setValue("roomNumber", data?.roomNumber)
+    setValue("price", data?.price)
+    setValue("capacity", data?.capacity)
+    setValue("discount", data?.discount)
+
+
+
+  }
+  const getFacilities = async () => {
     try {
-      const response=await axiosInstanceAdmin.get(FACILITIES_URLS.GET_ALL_FACILITIES)
-      console.log(" facility " ,response.data.data.facilities)
+      const response = await axiosInstanceAdmin.get(FACILITIES_URLS.GET_ALL_FACILITIES)
+      console.log(" facility ", response.data.data.facilities)
       setFacilities(response.data.data.facilities)
     } catch (error) {
       console.log(error);
-      
+
     }
-   
-   }
-  
+
+  }
+
   useEffect(() => {
-      (async () => {
-        await getFacilities()
-        console.log(facilities);
-        
-        if (params.id) {
-          await getRoom(params.id);
-        }
-      })();
-    }, []);
+    (async () => {
+      await getFacilities()
+      console.log(facilities);
+
+      if (params.id) {
+        await getRoom(params.id);
+      }
+    })();
+  }, []);
 
   return (
     <>
@@ -113,14 +129,14 @@ export default function RoomsForm() {
           alignItems: "stretch",
           width: "50%",
           marginTop: "100px",
-          marginX:"auto"
+          marginX: "auto"
         }}
       >
         <Stack spacing={2}>
           <TextField
             id="outlined-basic"
             label="Room Number"
-            variant="filled"
+            variant="outlined"
             type="text"
             error={!!errors.roomNumber}
             helperText={errors.roomNumber?.message}
@@ -142,7 +158,7 @@ export default function RoomsForm() {
           <TextField
             id="outlined-basic"
             label="Price"
-            variant="filled"
+            variant="outlined"
             type="number"
             error={!!errors.price}
             helperText={errors.price?.message}
@@ -156,7 +172,7 @@ export default function RoomsForm() {
           <TextField
             id="outlined-basic"
             label="Capacity"
-            variant="filled"
+            variant="outlined"
             type="number"
             error={!!errors.capacity}
             helperText={errors.capacity?.message}
@@ -176,12 +192,12 @@ export default function RoomsForm() {
             justifyContent: "space-between",
             width: "100%",
           }}
-          
+
         >
           <TextField
             id="outlined-basic"
             label="Discount"
-            variant="filled"
+            variant="outlined"
             type="text"
             error={!!errors.discount}
             helperText={errors.discount?.message}
@@ -192,39 +208,54 @@ export default function RoomsForm() {
               required: "discount is required",
             })}
           />
-          
-    <Box sx={{ minWidth: 120 }}>
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Facilities</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={facilitySelect}
-          {...register("facilities")}
-          label="Age"
-          multiple
-          onChange={handleChange}
-         
-        >  
-        {facilities?.map(({_id,name})=>(
-             <MenuItem key={_id} value={_id}>{name}</MenuItem>
-        ))}
-          
-          
-        </Select>
-      </FormControl>
-    </Box>
-  
 
-          
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Facilities</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={facilitySelect}
+                {...register("facilities")}
+                label="Age"
+                multiple
+                onChange={handleChange}
+
+              >
+                {facilities?.map(({ _id, name }) => (
+                  <MenuItem key={_id} value={_id}>{name}</MenuItem>
+                ))}
+
+
+              </Select>
+            </FormControl>
+          </Box>
+
+
+
 
         </Stack>
         <Stack spacing={2}>
-        <input type="file" 
+          {/* <input type="file"
             {...register('imgs')}
-            
-           />
 
+          /> */}
+          <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
+          >
+            Upload files
+            <VisuallyHiddenInput
+              type="file"
+              {...register('imgs')}
+              onChange={(event) => console.log(event.target.files)}
+              multiple
+
+            />
+          </Button>
         </Stack>
         <Divider sx={{ my: 50 }} orientation="horizontal" flexItem />
         <Stack
@@ -234,17 +265,17 @@ export default function RoomsForm() {
             alignItems: "stretch",
             justifyContent: "flex-end",
             width: "100%",
-            
+
           }}
         >
-          <Button onClick={()=>{navigate("/admin/newroom")}} sx={{ backgroundColor: "white", color: "#203FC7", borderColor:"#203FC7",paddingBlock:0.93,paddingInline:3.8}}  variant="outlined">Cancel</Button>
-          <Button type="submit" sx={{ backgroundColor: "#203FC7", color: "white" ,paddingBlock:0.93,paddingInline:2}} variant="contained">Save</Button>
+          <Button onClick={() => { navigate("/admin/newroom") }} sx={{ backgroundColor: "white", color: "#203FC7", borderColor: "#203FC7", paddingBlock: 0.93, paddingInline: 3.8 }} variant="outlined">Cancel</Button>
+          <Button type="submit" sx={{ backgroundColor: "#203FC7", color: "white", paddingBlock: 0.93, paddingInline: 2 }} variant="contained">{isSubmitting ? "Saveing..." : "Save"}</Button>
 
         </Stack>
       </Stack>
-     
 
-      
+
+
     </>
   );
 }
