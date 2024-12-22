@@ -118,8 +118,9 @@ const getAllRooms = async (pageSize: number, currentPage: number) => {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLElement> , id ) => {
     setAnchorEl(event.currentTarget);
+    setSelectedIdRoom(id);
   };
   const handleClose = (id) => {
     setAnchorEl(null);
@@ -168,7 +169,7 @@ const getAllRooms = async (pageSize: number, currentPage: number) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {roomsList.map((room: roomData) => (
+              {roomsList?.map((room: roomData) => (
                 <StyledTableRow key={room._id}>
                   <StyledTableCell component="th" scope="row">
                     {room.roomNumber}
@@ -187,7 +188,7 @@ const getAllRooms = async (pageSize: number, currentPage: number) => {
                         aria-controls={open ? 'long-menu' : undefined}
                         aria-expanded={open ? 'true' : undefined}
                         aria-haspopup="true"
-                        onClick={handleClick}
+                        onClick={(e)=>handleClick(e, room._id)}
                       >
                         <MoreVertIcon />
                       </IconButton>
@@ -197,7 +198,7 @@ const getAllRooms = async (pageSize: number, currentPage: number) => {
                           'aria-labelledby': 'long-button',
                         }}
                         anchorEl={anchorEl}
-                        open={open}
+                        open={selectedIdRoom ==room._id && Boolean(anchorEl)}
                         onClose={handleClose}
                         slotProps={{
                           paper: {

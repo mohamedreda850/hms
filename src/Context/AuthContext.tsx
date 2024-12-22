@@ -25,14 +25,12 @@ export default function AuthContextProvider(props ) {
   useEffect(() => {
     const token = localStorage.getItem("HMSToken");
     if (token) {
-      
-      setTimeout(() => {
-        const encodedToken = jwtDecode(token);
-        const rolet = encodedToken?.role;
-        setLoginData({ role: `${rolet =='admin' ? 'admin':"user"}` }); 
-        setUserId(encodedToken._id);
-        setLoading(false);
-      }, 1000);
+      const encodedToken = jwtDecode(token);
+      const rolet = encodedToken?.role;
+      setLoginData({ role: `${rolet =='admin' ? 'admin':"user"}` }); 
+      setUserId(encodedToken._id);
+      setLoading(false);
+     
     } else {
       setLoading(false);
     }
