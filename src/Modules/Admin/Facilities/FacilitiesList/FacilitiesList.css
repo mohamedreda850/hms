@@ -1,0 +1,60 @@
+table tbody tr td.action {
+    position: relative;
+}
+table tbody tr td.action button, .tasks-list table tbody tr td button {
+    background: transparent;
+    border: none;
+    outline: none;
+}
+.menu {
+    display: none;
+    padding: 0;
+    position: absolute;
+    top: -15px;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 16px 0 #0000001A;
+    border-radius: 20px;
+    width: 174px;
+    /* height: 90px; */
+}
+.menu .btn-menu {
+    color: #000;
+    height: 30px;
+}
+.menu .btn-menu i{
+    color: blue;
+}
+.menu .list-item {
+    list-style: none;
+    cursor: pointer;
+    padding: 0px 15px;
+    text-align: left;
+} 
+
+.menu .list-item:hover {
+    background-color: #F8F9FB;
+    border-radius: 20px;
+}
+.menu .list-item i {
+    padding: 0px 15px 0px 0px !important;
+}
+.menu.show {
+    display: block;
+    position: absolute;
+    left: -20px;
+}
+
+@media (max-width:768px) {
+    .menu.show {
+        position: absolute;
+        top: -15px;
+        left: -100px;
+    }
+}
+@media (min-width:768px) and (max-width: 990px){
+    .menu.show {
+        position: absolute;
+        top: -15px;
+        left: -100px;
+    }
+}

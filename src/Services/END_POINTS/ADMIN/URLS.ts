@@ -38,10 +38,10 @@ export const BOOKING_URLS = {
 };
 export const FACILITIES_URLS = {
     ADD_FACILITY: "/room-facilities",
-    GET_FACILITY: (id: string) => `/room-facilities/${id}`,
+    GET_FACILITY: (id: number) => `/room-facilities/${id}`,
     GET_ALL_FACILITIES: "/room-facilities",
-    UPDATE_FACILITY: (id: string) => `/room-facilities/${id}`,
-    DELETE_FACILITY: (id: string) => `/room-facilities/${id}`,
+    UPDATE_FACILITY: (id: number) => `/room-facilities/${id}`,
+    DELETE_FACILITY: (id: number) => `/room-facilities/${id}`,
 }
 
 export const ADS_URLS = {
