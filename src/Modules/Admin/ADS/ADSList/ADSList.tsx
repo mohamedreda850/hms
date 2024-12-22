@@ -18,17 +18,36 @@ import { ADS_API } from "../../../../Services/END_POINTS/USER/URLS";
 import styles from "./ADSList.module.css"; // Use your existing CSS file for styles
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ADSForm from "../ADSForm/ADSForm";
+import React from "react";
+
+import { SelectChangeEvent } from "@mui/material/Select";
+
+import {
+  ADS_URLS,
+  ROOMS_URLS,
+} from "../../../../Services/END_POINTS/ADMIN/URLS";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+
 // Define types for the ad data
 interface Room {
   roomNumber: string;
   price: number;
   discount: number;
   capacity: number;
+  _id: string;
 }
 
 interface Ad {
   _id: string;
   room: Room;
+  isActive: boolean;
+}
+
+interface roomsApi {
+  _id: string;
+  room: { roomNumber: string };
   isActive: boolean;
 }
 
@@ -41,8 +60,70 @@ export default function ADSList() {
     setAds(response.data.data.ads);
   };
 
+  //modal
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { isSubmitting },
+  } = useForm();
+
+  const getRooms = async () => {
+    try {
+      const { data } = await axiosInstanceAdmin.get<roomsApi>(
+        ROOMS_URLS.GET_ALL_ROOMS
+      );
+      setRoomsApi(data.data.rooms);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const [roomsApi, setRoomsApi] = useState([]);
+  const [roomId, setRoomId] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+
+  const onSubmit = async (data) => {
+    try {
+      if (isEditing) {
+        const response = await axiosInstanceAdmin.put(
+          ADS_URLS.UPDATE_ADS(roomId),
+          data
+        );
+        console.log(response.data);
+        toast.success("ADS Update Successfully");
+      } else {
+        const response = await axiosInstanceAdmin.post(ADS_URLS.ADD_ADS, data);
+        console.log(response.data);
+        toast.success("ADS Added Successfully");
+      }
+      getAds();
+      setOpen(false);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => {
+    setOpen(false);
+    setIsEditing(false);
+    setRoomId("");
+  };
+
+  const handleEditAd = (ad: Ad) => {
+    setRoomId(ad._id);
+    setIsEditing(true);
+    setValue("room", ad.room._id);
+    setValue("discount", ad.room.discount);
+    setValue("isActive", ad.isActive ? "true" : "false");
+    setOpen(true);
+  };
   useEffect(() => {
     getAds();
+    getRooms();
   }, []);
 
   const getCapacity = (capacity: number): string => {
@@ -89,6 +170,7 @@ export default function ADSList() {
         </div>
         <div>
           <Button
+            onClick={() => handleOpen()}
             sx={{
               backgroundColor: "#203FC7",
               color: "white",
@@ -156,7 +238,10 @@ export default function ADSList() {
                   </IconButton>
                   {dropdownOpen === row._id && (
                     <div className={styles.dropdownMenu}>
-                      <div className={styles.menuItem}>
+                      <div
+                        onClick={() => handleEditAd(row)}
+                        className={styles.menuItem}
+                      >
                         <EditIcon
                           sx={{
                             marginRight: "7px",
@@ -183,6 +268,17 @@ export default function ADSList() {
           </TableBody>
         </Table>
       </TableContainer>
+      {/* modal */}
+      <ADSForm
+        roomsApi={roomsApi}
+        onSubmit={onSubmit}
+        open={open}
+        handleClose={handleClose}
+        register={register}
+        handleSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
+        isEditing={isEditing}
+      />
     </div>
   );
 }
