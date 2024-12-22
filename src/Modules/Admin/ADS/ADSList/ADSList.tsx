@@ -10,6 +10,7 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Pagination,
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useEffect, useState } from "react";
@@ -29,6 +30,7 @@ import {
 } from "../../../../Services/END_POINTS/ADMIN/URLS";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import DeleteConfirmation from "../../Shared/DeleteConfirmation/DeleteConfirmation";
 
 // Define types for the ad data
 interface Room {
@@ -54,12 +56,25 @@ interface roomsApi {
 export default function ADSList() {
   const [ads, setAds] = useState<Ad[]>([]);
   const [dropdownOpen, setDropdownOpen] = useState<string | null>(null); // Track which dropdown is open
-
-  const getAds = async () => {
-    const response = await axiosInstanceAdmin.get<Ad>(ADS_API.GET_ALL_ADS);
-    setAds(response.data.data.ads);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
+  const getAds = async (pageSize: number, currentPage: number) => {
+    try {
+       const response = await axiosInstanceAdmin.get<Ad>(ADS_API.GET_ALL_ADS , { params: { size: pageSize, page: currentPage }, });
+    setAds(response?.data?.data?.ads);
+    const totalCount = response?.data?.data?.totalCount || 0;
+        setTotalPages(Math.ceil(totalCount / pageSize));
+    } catch (error) {
+      
+    }
+   
   };
-
+  const handlePageChange = async (event: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
+    await getAds(pageSize, page);
+   
+  };
   //modal
   const {
     register,
@@ -92,9 +107,13 @@ export default function ADSList() {
         );
         console.log(response.data);
         toast.success("ADS Update Successfully");
+        
+  
       } else {
         const response = await axiosInstanceAdmin.post(ADS_URLS.ADD_ADS, data);
         console.log(response.data);
+        
+  
         toast.success("ADS Added Successfully");
       }
       getAds();
@@ -122,7 +141,7 @@ export default function ADSList() {
     setOpen(true);
   };
   useEffect(() => {
-    getAds();
+    getAds(pageSize, currentPage);
     getRooms();
   }, []);
 
@@ -140,11 +159,31 @@ export default function ADSList() {
   };
 
   const handleClick = (id: string) => {
-    setDropdownOpen(dropdownOpen === id ? null : id); // Toggle dropdown open/close
+    setDropdownOpen(dropdownOpen === id ? null : id); 
   };
-
+  
+  const [selectedADId, setselectedADId] = useState('');
+  const [openModal, setopenModal] = useState(false);
+  const handleDeleteModalOpen = (id: string) => {
+    console.log(id);
+    
+    setselectedADId(id);
+    setopenModal(true);
+  }
+  const handleCloseModal = () => setopenModal(false);
+  const deleteAd = async () => {
+    try {
+      const response = await axiosInstanceAdmin.delete(ADS_URLS.DELETE_ADS(selectedADId));
+      toast.success("ADS Deleted Successfully");
+      getAds(pageSize, currentPage);
+      handleCloseModal();
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
   return (
     <div>
+      <DeleteConfirmation deleteItem={"AD"} deleteFunction={deleteAd} handleClose={handleCloseModal} open={openModal} />
       <Stack
         direction="row"
         sx={{
@@ -152,7 +191,7 @@ export default function ADSList() {
           alignItems: "center",
           overflow: "hidden",
           height: "100px",
-          width: "95vw",
+          width: "90vw",
           justifySelf: "center",
           marginX: "auto",
         }}
@@ -250,9 +289,10 @@ export default function ADSList() {
                         />{" "}
                         Edit
                       </div>
-                      <div className={styles.menuItem}>
+                      <div onClick={() => handleDeleteModalOpen(row._id)} className={styles.menuItem}>
                         {" "}
                         <DeleteIcon
+                        
                           sx={{
                             marginRight: "7px",
                             color: "#203FC7",
@@ -267,6 +307,15 @@ export default function ADSList() {
             ))}
           </TableBody>
         </Table>
+        <Stack spacing={4} sx={{marginTop: "2rem", justifyContent: "center", alignItems: "center"}}>
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              variant="outlined"
+              shape="rounded"
+            />
+          </Stack>
       </TableContainer>
       {/* modal */}
       <ADSForm
