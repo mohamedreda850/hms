@@ -1,17 +1,16 @@
 import styles from "./RoomsForm.module.css";
-import { Box, Divider, FormControl, IconButton, InputAdornment, Select, SelectChangeEvent, Stack } from "@mui/material";
-import Typography from "@mui/material/Typography";
+import { Box, Divider, FormControl,  Select, SelectChangeEvent, Stack } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import { axiosInstanceAdmin, FACILITIES_URLS, ROOMS_URLS } from "../../../../Services/END_POINTS/ADMIN/URLS";
-import { Theme, useTheme } from '@mui/material/styles';
-import OutlinedInput from '@mui/material/OutlinedInput';
+
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
+
+
 export default function RoomsForm() {
   const [facilitySelect, setFacilitySelect] = useState<string[]>([]);
 
@@ -24,6 +23,7 @@ export default function RoomsForm() {
       typeof value === 'string' ? value.split(',') : value,
     );
   };
+  const navigate = useNavigate();
   const [facilities, setFacilities] = useState([])
   const params= useParams()
   const {
@@ -32,23 +32,39 @@ export default function RoomsForm() {
     formState: { errors, isSubmitting },
     setValue,
   } = useForm();
-  const onSubmit = async (data1) => {
+  const onSubmit = async (data) => {
+
     const formData = new FormData();
-    formData.append("roomNumber", data1?.roomNumber);
-    formData.append("price", data1?.price);
-    formData.append("capacity", data1?.capacity);
-    formData.append("discount", data1?.discount);
-    facilities.forEach((facility:string)=>
-     formData.append('facilities[]',facility)
-    )
-    formData.append("imgs", data1?.images[0]);
-    const response=await axiosInstanceAdmin[params.id?'put':'post'](
+    formData.append("roomNumber", data?.roomNumber);
+    formData.append("price", data?.price);
+    formData.append("capacity", data?.capacity);
+    formData.append("discount", data?.discount);
+  
+  
+    facilitySelect.forEach((facilityId) =>
+      formData.append("facilities[]", facilityId)
+    );
+  
+    
+
+      formData.append("imgs", data.imgs[0]);  
+    
+  
+    console.log("Form Data:", data);
+    try {
+        await axiosInstanceAdmin[params.id?'put':'post'](
       params.id?
         ROOMS_URLS.UPDATE_ROOM(params.id)
         :
         ROOMS_URLS.ADD_ROOM
       ,formData
     )
+   
+    } catch (error) {
+      console.log(error);
+      
+    }
+  
   };
   const getRoom =async(id:string)=>{
     const {data}=await axiosInstanceAdmin.get(ROOMS_URLS.GET_ROOM(id))
@@ -58,7 +74,8 @@ export default function RoomsForm() {
     setValue("price",data?.price)
     setValue("capacity",data?.capacity)
     setValue("discount",data?.discount)
-   setValue("facilities", data?.facilities);
+    
+   
 
    }   
    const getFacilities =async()=>{
@@ -72,6 +89,7 @@ export default function RoomsForm() {
     }
    
    }
+  
   useEffect(() => {
       (async () => {
         await getFacilities()
@@ -82,7 +100,7 @@ export default function RoomsForm() {
         }
       })();
     }, []);
- 
+
   return (
     <>
       <Stack
@@ -109,7 +127,7 @@ export default function RoomsForm() {
             {...register("roomNumber", {
               required: "roomNumber is required",
             })}
-          ></TextField>
+          />
         </Stack>
 
         <Stack
@@ -189,7 +207,7 @@ export default function RoomsForm() {
          
         >  
         {facilities?.map(({_id,name})=>(
-             <MenuItem key={_id} value={name}>{name}</MenuItem>
+             <MenuItem key={_id} value={_id}>{name}</MenuItem>
         ))}
           
           
@@ -202,14 +220,11 @@ export default function RoomsForm() {
 
         </Stack>
         <Stack spacing={2}>
-          <TextField
-            id="outlined-basic"
-            variant="filled"
-            type="file"
-           
-            {...register("imgs",)}
+        <input type="file" 
+            {...register('imgs')}
             
-          />
+           />
+
         </Stack>
         <Divider sx={{ my: 50 }} orientation="horizontal" flexItem />
         <Stack
@@ -222,7 +237,7 @@ export default function RoomsForm() {
             
           }}
         >
-          <Button sx={{ backgroundColor: "white", color: "#203FC7", borderColor:"#203FC7",paddingBlock:0.93,paddingInline:3.8}}  variant="outlined">Cancel</Button>
+          <Button onClick={()=>{navigate("/admin/newroom")}} sx={{ backgroundColor: "white", color: "#203FC7", borderColor:"#203FC7",paddingBlock:0.93,paddingInline:3.8}}  variant="outlined">Cancel</Button>
           <Button type="submit" sx={{ backgroundColor: "#203FC7", color: "white" ,paddingBlock:0.93,paddingInline:2}} variant="contained">Save</Button>
 
         </Stack>
