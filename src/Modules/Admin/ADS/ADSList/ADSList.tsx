@@ -101,12 +101,19 @@ export default function ADSList() {
   const onSubmit = async (data) => {
     try {
       if (isEditing) {
-        const response = await axiosInstanceAdmin.put(
+        try {
+          const { room, ...updateData } = data;
+             const response = await axiosInstanceAdmin.put(
           ADS_URLS.UPDATE_ADS(roomId),
-          data
+          updateData
         );
         console.log(response.data);
         toast.success("ADS Update Successfully");
+        } catch (error) {
+          console.log(error);
+          
+        }
+     
         
   
       } else {

@@ -113,6 +113,7 @@ const ADSForm = ({
                       id="demo-simple-select"
                       value={rooms}
                       label=""
+                      disabled={isEditing}
                       onChange={handleChange}
                     >
                       {roomsApi.map((room) => (
