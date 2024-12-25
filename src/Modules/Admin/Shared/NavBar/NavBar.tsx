@@ -3,51 +3,38 @@ import styles from './NavBar.module.css';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-
-
-
-
 import Avatar from '@mui/material/Avatar';
-
-
 import { Typography } from '@mui/material';
 import { AuthContext } from '../../../../Context/AuthContext';
 import { useContext, useEffect, useState } from 'react';
-import { AUTH_URL, axiosInstanceAdmin } from '../../../../Services/END_POINTS/ADMIN/URLS';
+
 
 
 
 export default function NavBar() {
  
-const { userId} = useContext(AuthContext)
-const [userData, setUserData] = useState([])
-const getUserprofile = async () => {
-  try {
-    
-    const response = await axiosInstanceAdmin.get(AUTH_URL.USER_Profile(userId));
-    console.log(response.data.data.user);
-    
-    setUserData(response.data.data.user)
-  } catch (error) {
-    console.log(error);
-    
-  }
-}
+
+const [userName, setUseName] = useState([])
+const {userData} = useContext(AuthContext)
 useEffect(()=>{
-  console.log(userId);
+  if (userData){
+   
+   setUseName(userData.data.data.user.userName)
+   console.log(userData.data.data.user.userName)
+  }
   
-  getUserprofile()
   
-},[])
+  
+},[userData])
 
   return (
     <AppBar position="static" sx={{backgroundColor:'#F8F9FB',color:'#000' , borderRadius:3 , boxShadow:0 }}>
     <Toolbar>
       
       <Box sx={{ flexGrow: 1 }} />
-      <Avatar alt={userData?.userName}  />
+      <Avatar alt={userName}  />
       <Typography variant='body2' sx={{marginLeft:1}}>
-      {userData?.userName}
+      {userName}
       </Typography>
     </Toolbar>
   </AppBar>

@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form"
 import { AUTH_URL, axiosInstanceAdminAuth } from '../../../Services/END_POINTS/ADMIN/URLS';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../Context/AuthContext';
 import { toast } from 'react-toastify';
 import { EMAIL_VALIDATION, PASWORD_VALIDATION } from '../../../Services/Validation/VALIDATION';
@@ -24,18 +24,20 @@ interface loginData {
 export default function Login() {
   const [isPasswordVisable, setIsPasswordVisable] = useState(false);
   const navigate = useNavigate();
-  const { saveLoginData } = useContext(AuthContext)
+
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<loginData>()
+  const { saveLoginData } = useContext(AuthContext);
   const onSubmit = async (data: loginData) => {
     try {
       const response = await axiosInstanceAdminAuth.post<loginData>(AUTH_URL.LOGIN, data)
       localStorage.setItem('HMSToken', response.data.data.token)
       const token: any = response?.data?.data?.token;
       const decodedToken: any = jwtDecode(token);
-      console.log(decodedToken); const role = decodedToken.role;
+      
+      const role = decodedToken.role;
       saveLoginData();
       toast.success(response?.message || 'Login Successfully');
-      navigate(`${role === "admin" ? '/admin/' : '/'}`)
+      navigate(`${role === "admin" ? '/admin' : '/'}`)
     } catch (error) {
       console.log(error);
       toast.error(error?.response?.data?.message || 'Login failed');
@@ -46,6 +48,7 @@ export default function Login() {
   const handlePassword = () => {
     setIsPasswordVisable(!isPasswordVisable)
   }
+ 
   return <>
     <Stack
       direction="row"

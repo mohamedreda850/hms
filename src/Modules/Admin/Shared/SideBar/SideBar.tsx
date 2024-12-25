@@ -90,7 +90,9 @@ export default function SideBar() {
   };
   function  logOut(){
     localStorage.removeItem("HMSToken")
+    
     navigate("/")
+    location.reload()
   }
   return (
 
