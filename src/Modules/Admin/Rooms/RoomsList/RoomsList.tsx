@@ -69,6 +69,7 @@ const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
   const [selectedIdRoom, setSelectedIdRoom] = useState('');
+    const [deleteLoad, setDeleteLoad] = useState(false)
 
   const handlePageChange = async (event: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
@@ -94,6 +95,7 @@ const getAllRooms = async (pageSize: number, currentPage: number) => {
   };
 
   let deleteRoom = async () => {
+    setDeleteLoad(true)
     try {
 
       let response = await axiosInstanceAdmin.delete(ROOMS_URLS.DELETE_ROOM(selectedIdRoom));
@@ -101,10 +103,12 @@ const getAllRooms = async (pageSize: number, currentPage: number) => {
       console.log(response)
       getAllRooms(pageSize, currentPage);
       handleCloseModal()
+      setDeleteLoad(false)
     } catch (error) {
 
       console.log(error);
       toast.error(error.response.data.message);
+      setDeleteLoad(false)
     }
 
 
@@ -136,7 +140,7 @@ const getAllRooms = async (pageSize: number, currentPage: number) => {
 
   return (
     <>
-      <DeleteConfirmation deleteItem={"Room"} deleteFunction={deleteRoom} handleClose={handleCloseModal} open={openModal} />
+      <DeleteConfirmation deleteItem={"Room"} deleteFunction={deleteRoom} handleClose={handleCloseModal} open={openModal} deleteLoad={deleteLoad} />
       <Stack
         direction="column"
       >
@@ -155,8 +159,10 @@ const getAllRooms = async (pageSize: number, currentPage: number) => {
             Add New Room
           </Button>
         </Stack>
-        <TableContainer component={Paper}>
-          <Table aria-label="customized table">
+        <TableContainer component={Paper}  sx={{
+    maxHeight: "80vh", 
+  }}>
+          <Table aria-label="sticky table" stickyHeader >
             <TableHead>
               <TableRow>
                 <StyledTableCell>Room Number</StyledTableCell>
@@ -177,9 +183,9 @@ const getAllRooms = async (pageSize: number, currentPage: number) => {
                   <StyledTableCell align="right">
                     {room.images ? <img  style={{ width: "60px" , height:"60px"}} src={`${room.images[0]}`} alt='' /> : ''}
                   </StyledTableCell>
-                  <StyledTableCell align="right">{room.price}</StyledTableCell>
-                  <StyledTableCell align="right">{room.discount}</StyledTableCell>
-                  <StyledTableCell align="right">{room.capacity}</StyledTableCell>
+                  <StyledTableCell align="right">{room.price} EGP</StyledTableCell>
+                  <StyledTableCell align="right">{room.discount} EGP</StyledTableCell>
+                  <StyledTableCell align="center">{room.capacity}</StyledTableCell>
                   <StyledTableCell align="right">
                     <Stack >
                       <IconButton

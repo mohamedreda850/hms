@@ -87,9 +87,6 @@ export default function UsersList() {
     return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   };
 
-  const handleViewDetails = (userId: string) => {
-    navigate(`/user-details/${userId}`);
-  };
 
   const renderSkeletonRows = () => (
     Array.from({ length: 5 }).map((_, index) => (
@@ -104,7 +101,7 @@ export default function UsersList() {
   );
 
   return (
-    <Stack sx={{ overflow: 'hidden', width: '90vw' }}>
+    <Stack sx={{ overflow: 'hidden', width: '92vw' }}>
       <Box>
         <Typography variant="h4" sx={{ fontSize: '1.7rem', fontWeight: '500' }}>
           Users Table Details
@@ -115,8 +112,9 @@ export default function UsersList() {
       </Box>
 
       <Box sx={{ overflowX: 'auto' }}>
-        <TableContainer component={Paper} sx={{ boxShadow: 'none', border: 'none' }}>
+        <TableContainer component={Paper} sx={{ boxShadow: 'none', border: 'none' , maxHeight:"68vh"}}>
           <Table
+          stickyHeader
             sx={{
               minWidth: 700,
               borderCollapse: 'collapse',
@@ -135,7 +133,7 @@ export default function UsersList() {
                 <StyledTableCell align="center">Role</StyledTableCell>
                 <StyledTableCell align="center">Created At</StyledTableCell>
                 <StyledTableCell align="center">Profile Image</StyledTableCell>
-                <StyledTableCell align="center">View</StyledTableCell>
+                
               </TableRow>
             </TableHead>
             <TableBody>
@@ -156,12 +154,7 @@ export default function UsersList() {
                         style={{ width: 50, height: 50, borderRadius: '50%' }}
                       />
                     </StyledTableCell>
-                    <StyledTableCell align="center">
-                      <Visibility
-                        sx={{ cursor: 'pointer', color: '#1976d2' }}
-                        onClick={() => handleViewDetails(user._id)}
-                      />
-                    </StyledTableCell>
+                    
                   </StyledTableRow>
                 ))}
             </TableBody>

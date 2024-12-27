@@ -1,42 +1,36 @@
 import { jwtDecode } from "jwt-decode";
 import { createContext, useEffect, useState } from "react";
-import { get } from "react-hook-form";
+
+import { AUTH_URL, axiosInstanceAdmin } from "../Services/END_POINTS/ADMIN/URLS";
 
 export const AuthContext = createContext(null);
 
 export default function AuthContextProvider(props ) {
-  const [loginData, setLoginData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [userId, setUserId] = useState(true);
 
-  const saveLoginData = () => {
-    const decodedToken = localStorage.getItem("HMSToken");
+  const [userData, setUserData] = useState()
+
+  const saveLoginData = async () => {
+    
+
+      try {
+        const decodedToken = localStorage.getItem("HMSToken");
     
       const encodedToken = jwtDecode(decodedToken);
-      setLoginData(encodedToken);
-    setUserId(encodedToken._id);
+        const response = await axiosInstanceAdmin.get(AUTH_URL.USER_Profile(encodedToken._id));  
+        console.log(response);
+        
+      setUserData(response)
+      } catch (error) {
+        console.log(error);
+        
+      }
+    
   };
 
-  useEffect(() => {
-    if (localStorage.getItem("HMSToken")) {
-      saveLoginData();
-    }
-  }, []); 
-  useEffect(() => {
-    const token = localStorage.getItem("HMSToken");
-    if (token) {
-      const encodedToken = jwtDecode(token);
-      const rolet = encodedToken?.role;
-      setLoginData({ role: `${rolet =='admin' ? 'admin':"user"}` }); 
-      setUserId(encodedToken._id);
-      setLoading(false);
-     
-    } else {
-      setLoading(false);
-    }
-  }, []);
+  
+
   return (
-    <AuthContext.Provider value={{userId, loginData, saveLoginData,loading }}>
+    <AuthContext.Provider value={{ userData  , saveLoginData , }}>
       {props.children}
     </AuthContext.Provider>
   );

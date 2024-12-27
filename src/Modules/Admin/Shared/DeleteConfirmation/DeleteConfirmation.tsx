@@ -13,6 +13,7 @@ interface DeleteConfirmationProps {
   deleteFunction: () => void;
   handleClose: () => void;
   open: boolean;
+  deleteLoad:boolean;
 }
 const style = {
   position: 'absolute',
@@ -26,7 +27,7 @@ const style = {
   p: 4,
 };
 
-const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ deleteItem, deleteFunction, handleClose, open }) => {
+const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ deleteItem, deleteFunction, handleClose, open ,deleteLoad }) => {
 
   return (
     <div>
@@ -56,7 +57,7 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ deleteItem, del
               <Stack spacing={2} direction='row' sx={{ mt: 2 }} >
 
                 <Button variant='contained' onClick={handleClose}>Cansle</Button>
-                <Button variant='contained' color='error' onClick={deleteFunction}>Delete</Button></Stack>
+                <Button variant='contained' color='error' disabled={deleteLoad} onClick={deleteFunction}>{deleteLoad?"Deleteing...":"Delete"}</Button></Stack>
             </Stack>
 
 
@@ -68,6 +69,3 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ deleteItem, del
 }
 
 export default DeleteConfirmation;
-//
-//   const handleOpen = () => setOpen(true);
-//   const handleClose = () => setOpen(false);

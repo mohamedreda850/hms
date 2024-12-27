@@ -2,21 +2,32 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Box from "@mui/material/Box";
 import Backdrop from "@mui/material/Backdrop";
-import Select from "@mui/material/Select";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 import TextField from "@mui/material/TextField";
 import {
   Divider,
   FormControl,
   Grid2,
+  IconButton,
+  InputAdornment,
   InputLabel,
   MenuItem,
 } from "@mui/material";
 
 import { Button, Stack, Typography } from "@mui/material";
 import { useState } from "react";
-
-const ADSForm = ({
+interface ADSFormProps {
+  roomsApi: any;
+  onSubmit: any;
+  open: any;
+  handleClose: any;
+  register: any;
+  handleSubmit: any;
+  isSubmitting: any;
+  isEditing: any;
+}
+const ADSForm :React.FC<ADSFormProps> = ({
   roomsApi,
   onSubmit,
   open,
@@ -82,21 +93,20 @@ const ADSForm = ({
                       {isEditing ? "Edit Ad" : "Add New Ad"}
                     </Typography>
                   </Grid2>
-                  <Grid2 size={6}>
-                    <Typography
+                  <Grid2 size={6} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <IconButton
                       onClick={handleClose}
                       sx={{
-                        textAlign: "end",
+                        
                         cursor: "pointer",
-                        borderRadius: "20px",
-                        color: "red",
+                       color: "red",
+                       
                       }}
                       id="transition-modal-title"
-                      variant="h6"
-                      component="h2"
+                      
                     >
                       X
-                    </Typography>
+                    </IconButton>
                   </Grid2>
                 </Grid2>
 
@@ -127,6 +137,9 @@ const ADSForm = ({
                       sx={{ width: "100%", marginBlock: "10px" }}
                       id="outlined-basic"
                       label="Discount"
+                      InputProps={{
+                        endAdornment: <InputAdornment position="end">EGP</InputAdornment>,
+                      }}
                       variant="outlined"
                     />
                   </FormControl>

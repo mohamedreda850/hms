@@ -19,6 +19,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Link, useNavigate } from 'react-router-dom';
+import { OverridableComponent } from '@mui/material/OverridableComponent';
+import { SvgIconTypeMap } from '@mui/material';
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -28,8 +30,8 @@ const openedMixin = (theme: Theme): CSSObject => ({
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: 'hidden',
-  backgroundColor:"#203FC7",
-  color:"#fff"
+  backgroundColor: "#203FC7",
+  color: "#fff"
 });
 
 const closedMixin = (theme: Theme): CSSObject => ({
@@ -42,8 +44,8 @@ const closedMixin = (theme: Theme): CSSObject => ({
   [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
-  backgroundColor:"#203FC7",
-  color:"#fff"
+  backgroundColor: "#203FC7",
+  color: "#fff"
 });
 
 
@@ -56,14 +58,14 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     flexShrink: 0,
     whiteSpace: 'nowrap',
     boxSizing: 'border-box',
-    
+
     variants: [
       {
         props: ({ open }) => open,
         style: {
           ...openedMixin(theme),
           '& .MuiDrawer-paper': openedMixin(theme),
-          
+
         },
       },
       {
@@ -80,7 +82,46 @@ export default function SideBar() {
 
   const navigate = useNavigate()
   const [open, setOpen] = React.useState(false);
+  const styleMargin = () => { return open ? { mr: 3, } : { mr: 'auto', } }
+  const styleOpacity = () => { return open ? { opacity: 1, } : { opacity: 0, } }
+  const styleIcon = () => {
+    return {
+      color: "#fff",
+      minWidth: 0,
+      justifyContent: 'center',
 
+    }
+  }
+  const styleItemButton = () => {
+    return {
+
+      minWidth: 0,
+      justifyContent: 'center',
+
+    }
+  }
+  const listItem =(navigationDist : string , itemText :string , icon:any )=>{return <ListItem >
+    <ListItemButton onClick={() => navigate(navigationDist)} sx={[
+      styleItemButton,
+      styleMargin
+
+    ]}>
+      <ListItemIcon sx={[
+        styleIcon,
+        styleMargin
+
+      ]}>
+        {icon}
+        
+      </ListItemIcon>
+      <ListItemText
+         sx={[
+          styleOpacity
+        ]}>
+          {itemText}
+      </ListItemText>
+    </ListItemButton>
+  </ListItem>}
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -88,432 +129,83 @@ export default function SideBar() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  function  logOut(){
+  function logOut() {
     localStorage.removeItem("HMSToken")
+
     navigate("/")
+    location.reload()
   }
   return (
 
 
-    
 
 
-      <Drawer variant="permanent" open={open}>
-      
-        <List >
+
+    <Drawer variant="permanent" open={open}>
+
+      <List >
         {open ? (
-        <IconButton
-          color="inherit"
-          aria-label="close drawer"
-          onClick={handleDrawerClose}
-          edge="start"
-          sx={{ marginLeft:"auto" ,display: 'block'}}
-        >
-          <ChevronLeftIcon />
-        </IconButton>
-      ) : (
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          edge="start"
-          sx={{ marginLeft:"auto", display: 'block' }}
-        >
-          <ChevronRightIcon />
-        </IconButton>
-      )}
-<ListItem >
-  <ListItemButton onClick={()=>navigate("/admin")} sx={[
-          {
-            
-            minWidth: 0,
-            justifyContent: 'center',
-            
-          },
-          open
-            ? {
-              mr: 3,
-            }
-            : {
-              mr: 'auto',
-            },
-            
-        ]}>
-    <ListItemIcon  sx={[
-          {
-            color:"#fff",
-            minWidth: 0,
-            justifyContent: 'center',
-            
-          },
-          open
-            ? {
-              mr: 3,
-            }
-            : {
-              mr: 'auto',
-            },
-            
-        ]}>
-      <HomeIcon />
-    </ListItemIcon>
-    <ListItemText
-    primary={'home'} sx={[
-          open
-            ? {
-              opacity: 1,
-            }
-            : {
-              opacity: 0,
-            },
-        ]}>
+          <IconButton
+            color="inherit"
+            aria-label="close drawer"
+            onClick={handleDrawerClose}
+            edge="start"
+            sx={{ marginLeft: "auto", display: 'block' }}
+          >
+            <ChevronLeftIcon />
+          </IconButton>
+        ) : (
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{ marginLeft: "auto", display: 'block' }}
+          >
+            <ChevronRightIcon />
+          </IconButton>
+        )}
      
-    </ListItemText>
-  </ListItemButton>
-</ListItem>
-<ListItem sx={{marginTop:"-15px"}}>
-<ListItemButton onClick={()=>navigate("/admin/usersList")} sx={[
-          {
-            
-            minWidth: 0,
-            justifyContent: 'center',
-            
-          },
-          open
-            ? {
-              mr: 3,
-            }
-            : {
-              mr: 'auto',
-            },
-            
-        ]}>
-    <ListItemIcon  sx={[
-          {
-            color:"#fff",
-            minWidth: 0,
-            justifyContent: 'center',
-            
-          },
-          open
-            ? {
-              mr: 3,
-            }
-            : {
-              mr: 'auto',
-            },
-            
-        ]}>
-      <PeopleIcon />
-    </ListItemIcon>
-    <ListItemText sx={[
-          open
-            ? {
-              opacity: 1,
-            }
-            : {
-              opacity: 0,
-            },
-        ]}>
-      Users
-    </ListItemText>
-  </ListItemButton>
-</ListItem>
-<ListItem sx={{marginTop:"-15px"}}>
-<ListItemButton onClick={()=>navigate("/admin/rooms")} sx={[
-          {
-            
-            minWidth: 0,
-            justifyContent: 'center',
-            
-          },
-          open
-            ? {
-              mr: 3,
-            }
-            : {
-              mr: 'auto',
-            },
-            
-        ]}>
-    <ListItemIcon  sx={[
-          {
-            color:"#fff",
-            minWidth: 0,
-            justifyContent: 'center',
-            
-          },
-          open
-            ? {
-              mr: 3,
-            }
-            : {
-              mr: 'auto',
-            },
-            
-        ]}>
-      <DashboardOutlinedIcon />
-    </ListItemIcon>
-    <ListItemText sx={[
-          open
-            ? {
-              opacity: 1,
-            }
-            : {
-              opacity: 0,
-            },
-        ]}>
-      Rooms
-    </ListItemText>
-  </ListItemButton>
-</ListItem>
-<ListItem sx={{marginTop:"-15px"}}>
-<ListItemButton onClick={()=>navigate("/admin/ads")} sx={[
-          {
-            
-            minWidth: 0,
-            justifyContent: 'center',
-            
-          },
-          open
-            ? {
-              mr: 3,
-            }
-            : {
-              mr: 'auto',
-            },
-            
-        ]}>
-    <ListItemIcon  sx={[
-          {
-            color:"#fff",
-            minWidth: 0,
-            justifyContent: 'center',
-            
-          },
-          open
-            ? {
-              mr: 3,
-            }
-            : {
-              mr: 'auto',
-            },
-            
-        ]}>
-      <CalendarMonthOutlinedIcon />
-    </ListItemIcon>
-    <ListItemText sx={[
-          open
-            ? {
-              opacity: 1,
-            }
-            : {
-              opacity: 0,
-            },
-        ]}>
-      ADS
-    </ListItemText>
-  </ListItemButton>
-</ListItem>
-<ListItem sx={{marginTop:"-15px"}}>
-<ListItemButton onClick={()=>navigate("/admin/booking")} sx={[
-          {
-            
-            minWidth: 0,
-            justifyContent: 'center',
-            
-          },
-          open
-            ? {
-              mr: 3,
-            }
-            : {
-              mr: 'auto',
-            },
-            
-        ]}>
-    <ListItemIcon  sx={[
-          {
-            color:"#fff",
-            minWidth: 0,
-            justifyContent: 'center',
-            
-          },
-          open
-            ? {
-              mr: 3,
-            }
-            : {
-              mr: 'auto',
-            },
-            
-        ]}>
-      <BookmarksOutlinedIcon />
-    </ListItemIcon>
-    <ListItemText sx={[
-          open
-            ? {
-              opacity: 1,
-            }
-            : {
-              opacity: 0,
-            },
-        ]}>
-      Booking
-    </ListItemText>
-  </ListItemButton>
-</ListItem>
-<ListItem sx={{marginTop:"-15px"}}>
-<ListItemButton onClick={()=>navigate("/admin/facilities")} sx={[
-          {
-            
-            minWidth: 0,
-            justifyContent: 'center',
-            
-          },
-          open
-            ? {
-              mr: 3,
-            }
-            : {
-              mr: 'auto',
-            },
-            
-        ]}>
-    <ListItemIcon  sx={[
-          {
-            color:"#fff",
-            minWidth: 0,
-            justifyContent: 'center',
-            
-          },
-          open
-            ? {
-              mr: 3,
-            }
-            : {
-              mr: 'auto',
-            },
-            
-        ]}>
-      <AddHomeWorkIcon />
-    </ListItemIcon>
-    <ListItemText sx={[
-          open
-            ? {
-              opacity: 1,
-            }
-            : {
-              opacity: 0,
-            },
-        ]}>
-      Facilites
-    </ListItemText>
-  </ListItemButton>
-</ListItem>
-<ListItem onClick={()=>navigate("/admin/change-password")}  sx={{marginTop:"-15px"}}>
-  <ListItemButton sx={[
-          {
-            
-            minWidth: 0,
-            justifyContent: 'center',
-            
-          },
-          open
-            ? {
-              mr: 3,
-            }
-            : {
-              mr: 'auto',
-            },
-            
-        ]}>
-    <ListItemIcon  sx={[
-          {
-            color:"#fff",
-            minWidth: 0,
-            justifyContent: 'center',
-            
-          },
-          open
-            ? {
-              mr: 3,
-            }
-            : {
-              mr: 'auto',
-            },
-            
-        ]}>
-      <LockOpenOutlinedIcon />
-    </ListItemIcon>
-    <ListItemText sx={[
-          open
-            ? {
-              opacity: 1,
-            }
-            : {
-              opacity: 0,
-            },
-        ]}>
-      ChangePassword
-    </ListItemText>
-  </ListItemButton>
-</ListItem>
-<ListItem sx={{marginTop:"-15px"}}>
-  <ListItemButton onClick={logOut} sx={[
-          {
-            
-            minWidth: 0,
-            justifyContent: 'center',
-            
-          },
-          open
-            ? {
-              mr: 3,
-            }
-            : {
-              mr: 'auto',
-            },
-            
-        ]}>
-    <ListItemIcon  sx={[
-          {
-            color:"#fff",
-            minWidth: 0,
-            justifyContent: 'center',
-            
-          },
-          open
-            ? {
-              mr: 3,
-            }
-            : {
-              mr: 'auto',
-            },
-            
-        ]}>
-      <LogoutIcon  />
-    </ListItemIcon>
-    <ListItemText sx={[
-          open
-            ? {
-              opacity: 1,
-            }
-            : {
-              opacity: 0,
-            },
-        ]}>
-      Logout
-    </ListItemText>
-  </ListItemButton>
-</ListItem>
-          
-        </List>
+       { listItem("/admin" , "Home" , <HomeIcon />)}
+      
+        { listItem("/admin/usersList" , "Users" , <PeopleIcon />)}
+       
+        { listItem("/admin/rooms" , "Rooms", <AddHomeWorkIcon />)}
         
-      </Drawer>
+        { listItem("/admin/ads" , "ADS", <BookmarksOutlinedIcon />)}
+       
+        { listItem("/admin/booking" , "Booking", <CalendarMonthOutlinedIcon />)}
+     
+        {listItem("/admin/facilities" , "Facilities", <DashboardOutlinedIcon />)}
+       
+        {listItem("/admin/change-password" , "ChangePassword", <LockOpenOutlinedIcon />)}
+        <ListItem sx={{ marginTop: "-15px" }}>
+          <ListItemButton onClick={logOut} sx={[
+            styleItemButton,
+            styleMargin
+
+          ]}>
+            <ListItemIcon sx={[
+              styleIcon,
+              styleMargin
+
+            ]}>
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText sx={[
+              styleOpacity
+            ]}>
+              Logout
+            </ListItemText>
+          </ListItemButton>
+        </ListItem>
+
+      </List>
+
+    </Drawer>
 
 
 
-    
+
   )
- }
+}
