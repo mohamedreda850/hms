@@ -23,10 +23,11 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import TextField from '@mui/material/TextField';
-import img from '../../../../assets/images/Email (2).png'
-import { useForm } from 'react-hook-form';
+
+import { set, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { axiosInstanceAdmin, FACILITIES_URLS } from '../../../../Services/END_POINTS/ADMIN/URLS';
+import DeleteConfirmation from '../../Shared/DeleteConfirmation/DeleteConfirmation';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -71,9 +72,11 @@ export default function FacilitiesList() {
   const [facilities, setFacilities] = useState([])
   const [load, setLoad] = useState(true)
   const [activeMenuId, setActiveMenuId] = useState<number | null>(null);
-  const [open, setOpen] = useState(false);
+  const [deleteLoad, setDeleteLoad] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
   const [id, setId] = useState(0)
+  const [openModal, setopenModal] = useState(false);
+  
 
   const {
     register,
@@ -83,13 +86,6 @@ export default function FacilitiesList() {
     handleSubmit,
   } = useForm();
 
-  const handleClickOpen = (id: number) => {
-    setId(id)
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const handleClickOpenCreate = (id: number) => {
     if (id !== 0) {
@@ -127,17 +123,21 @@ export default function FacilitiesList() {
   }
 
   const deleteFacility = async () => {
+    setDeleteLoad(true)
     try {
       const res = await axiosInstanceAdmin.delete(FACILITIES_URLS.DELETE_FACILITY(id))
       console.log(res);
-      handleClose()
+      
       getFacilities()
       toast.success('Deleted Successfully')
+      setDeleteLoad(false)
+      setopenModal(false)
     } catch (error) {
       console.log(error);
+      setDeleteLoad(false)
     }
   }
-
+  const handleCloseModal = () => setopenModal(false);
   const createFacility = async (data: facilityData) => {
     try {
       const res = await axiosInstanceAdmin[id === 0 ? 'post' : 'put'](
@@ -150,7 +150,10 @@ export default function FacilitiesList() {
       toast.error(error?.response?.data?.message)
     }
   }
-
+  const handleOpen = (id: string) => {
+    setId(id);
+    setopenModal(true);
+  }
   useEffect(() => {
     getFacilities()
   }, [])
@@ -169,39 +172,7 @@ export default function FacilitiesList() {
         </Stack>
       </Box>
       {/* ================= Delete =============== */}
-      <BootstrapDialog
-        onClose={handleClose}
-        aria-labelledby="customized-dialog-title"
-        open={open}
-      >
-        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Delete Item
-        </DialogTitle>
-        <IconButton
-          aria-label="close"
-          onClick={handleClose}
-          sx={(theme) => ({
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            color: theme.palette.grey[500],
-          })}
-        >
-          <CloseIcon />
-        </IconButton>
-        <DialogContent dividers sx={{width: '500px'}}>
-          <Box sx={{textAlign: 'center'}}>
-            <img src={img} alt="" />
-          </Box>
-          <Typography gutterBottom variant='body1' sx={{fontWeight: 'bold', paddingTop: 4, textAlign: 'center'}}>Delete This room facility ?</Typography>
-          <Typography gutterBottom variant='body1' style={{color: '#49494999', textAlign: 'center'}}>are you sure you want to delete this item ? if you are sure just click on delete it</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button sx={{marginBlock: 2}} autoFocus onClick={deleteFacility} variant="contained" color="error">
-            Delete this item
-          </Button>
-        </DialogActions>
-      </BootstrapDialog>
+     <DeleteConfirmation deleteItem='Facilite' deleteFunction={deleteFacility} handleClose={handleCloseModal} open={openModal} deleteLoad={deleteLoad}/>
       {/* ============================= */}
 
       {/* ============== Create =============== */}
@@ -252,8 +223,8 @@ export default function FacilitiesList() {
       <Box component="section" sx={{p: 4}}  onClick={() => {
         if (activeMenuId) setActiveMenuId(null)
       }}>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <TableContainer component={Paper} sx={{maxHeight: '70vh'}}>
+          <Table sx={{ minWidth: 700 }} aria-label="customized table" stickyHeader>
             <TableHead>
               <TableRow>
                 <StyledTableCell>Name</StyledTableCell>
@@ -274,12 +245,7 @@ export default function FacilitiesList() {
                       <i style={{cursor:"pointer", color: 'black'}} className="fa-solid fa-ellipsis"></i>
                     </Button>
                     <List sx={{p: 0}} className={`menu ${activeMenuId === item?._id ? 'show' : ''}`}>
-                      <ListItem className='list-item'>
-                        <Button className='btn-menu'>
-                          <i title='View' className="fa-solid fa-eye text-primary"></i> 
-                          <ListItemText primary="View" />
-                        </Button>
-                      </ListItem>
+                      
                         <ListItem className='list-item'>
                           <Button className='btn-menu' onClick={() => {
                           handleClickOpenCreate(item?._id)
@@ -290,7 +256,7 @@ export default function FacilitiesList() {
                         </ListItem>
                       <ListItem className='list-item'>
                         <Button className='btn-menu' onClick={() => {
-                          handleClickOpen(item?._id)
+                          handleOpen(item?._id)
                         }}>
                           <i title='Delete' className="fa-solid fa-trash text-primary"></i> 
                           <ListItemText primary="Delete" />

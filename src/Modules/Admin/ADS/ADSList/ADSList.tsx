@@ -58,6 +58,7 @@ export default function ADSList() {
   const [dropdownOpen, setDropdownOpen] = useState<string | null>(null); // Track which dropdown is open
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [deleteLoad, setDeleteLoad] = useState(false)
   const pageSize = 10;
   const getAds = async (pageSize: number, currentPage: number) => {
     try {
@@ -172,18 +173,21 @@ export default function ADSList() {
   }
   const handleCloseModal = () => setopenModal(false);
   const deleteAd = async () => {
+    setDeleteLoad(true)
     try {
       const response = await axiosInstanceAdmin.delete(ADS_URLS.DELETE_ADS(selectedADId));
       toast.success("ADS Deleted Successfully");
       getAds(pageSize, currentPage);
+      setDeleteLoad(false)
       handleCloseModal();
     } catch (error) {
       toast.error(error.response.data.message);
+      setDeleteLoad(false)
     }
   }
   return (
     <div>
-      <DeleteConfirmation deleteItem={"AD"} deleteFunction={deleteAd} handleClose={handleCloseModal} open={openModal} />
+      <DeleteConfirmation deleteItem={"AD"} deleteFunction={deleteAd} handleClose={handleCloseModal} open={openModal} deleteLoad={deleteLoad}/>
       <Stack
         direction="row"
         sx={{
@@ -226,9 +230,10 @@ export default function ADSList() {
 
       <TableContainer
         component={Paper}
-        sx={{ border: "none", boxShadow: "none" }}
+        sx={{ border: "none", boxShadow: "none" , maxHeight:"80vh"}}
       >
         <Table
+        stickyHeader 
           sx={{ minWidth: 650, borderCollapse: "collapse" }}
           aria-label="simple table"
         >
@@ -258,8 +263,8 @@ export default function ADSList() {
                 <TableCell component="th" scope="row">
                   {row.room.roomNumber}
                 </TableCell>
-                <TableCell align="center">{row.room.price}</TableCell>
-                <TableCell align="center">{row.room.discount}</TableCell>
+                <TableCell align="center">{row.room.price} EGP</TableCell>
+                <TableCell align="center">{row.room.discount} EGP</TableCell>
                 <TableCell align="center">
                   {getCapacity(row.room.capacity)}
                 </TableCell>

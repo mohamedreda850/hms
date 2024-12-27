@@ -27,16 +27,11 @@ const VisuallyHiddenInput = styled('input')({
 
 export default function RoomsForm() {
   const [facilitySelect, setFacilitySelect] = useState<string[]>([]);
-
-  const handleChange = (event: SelectChangeEvent<typeof facilitySelect>) => {
-    const {
-      target: { value },
-    } = event;
-    setFacilitySelect(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
-  };
+const [imgeFile, setimgeFile] = useState()
+function handleImageChange(e) {
+  console.log(e.target.files);
+  setimgeFile(URL.createObjectURL(e.target.files[0]));
+}
   const navigate = useNavigate();
   const [facilities, setFacilities] = useState([])
   const params = useParams()
@@ -95,30 +90,46 @@ export default function RoomsForm() {
 
 
   }
-  const getFacilities = async () => {
-    try {
-      const response = await axiosInstanceAdmin.get(FACILITIES_URLS.GET_ALL_FACILITIES)
-      
-      setFacilities(response.data.data.facilities)
-    } catch (error) {
-      console.log(error);
-
-    }
-
-  }
+ 
 
   useEffect(() => {
-    (async () => {
-      await getFacilities()
-      
-
-      if (params.id) {
-        console.log(params.id);
-        
-        await getRoom(params.id);
+    
+    const getFacilities = async () => {
+      try {
+        const { data } = await axiosInstanceAdmin.get(FACILITIES_URLS.GET_ALL_FACILITIES);
+        setFacilities(data?.data?.facilities || []);
+      } catch (error) {
+        console.log(error);
       }
-    })();
-  }, []);
+    };
+
+   
+    const getRoomData = async (id: string) => {
+      try {
+        const { data } = await axiosInstanceAdmin.get(ROOMS_URLS.GET_ROOM(id));
+        const room = data?.data?.room;
+
+       
+        if (room?.facilities) {
+          const ids = room.facilities.map((f: { _id: string }) => f._id);
+          setFacilitySelect(ids);
+        }
+
+        
+        setValue("roomNumber", room?.roomNumber);
+        setValue("price", room?.price);
+        setValue("capacity", room?.capacity);
+        setValue("discount", room?.discount);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getFacilities();
+    if (params.id) {
+      getRoomData(params.id);
+    }
+  }, [params.id, setValue]);
 
   return (
     <>
@@ -226,7 +237,11 @@ export default function RoomsForm() {
                 {...register("facilities")}
                 label="Age"
                 multiple
-                onChange={handleChange}
+                onChange={(event) => {
+                  const { value } = event.target;
+                  const updated = typeof value === 'string' ? value.split(',') : value;
+                  setFacilitySelect(updated);
+                }}
                 sx={{width: "100%"}}
               >
                 {facilities?.map(({ _id, name }) => (
@@ -258,11 +273,12 @@ export default function RoomsForm() {
             <VisuallyHiddenInput
               type="file"
               {...register('imgs',{required: "image is required"})}
-              onChange={(event) => console.log(event.target.files)}
+              onChange={handleImageChange}
               multiple
 
             />
           </Button>
+          <img src={imgeFile} alt="" style={{height:300 , objectFit:"contain"}}/>
         </Stack>
         <Divider sx={{ my: 50 }} orientation="horizontal" flexItem />
         <Stack
@@ -275,7 +291,7 @@ export default function RoomsForm() {
 
           }}
         >
-          <Button onClick={() => { navigate("/admin/newroom") }} sx={{ backgroundColor: "white", color: "#203FC7", borderColor: "#203FC7", paddingBlock: 0.93, paddingInline: 3.8 }} variant="outlined">Cancel</Button>
+          <Button onClick={() => { navigate("/admin/rooms") }} sx={{ backgroundColor: "white", color: "#203FC7", borderColor: "#203FC7", paddingBlock: 0.93, paddingInline: 3.8 }} variant="outlined">Cancel</Button>
           <Button type="submit" sx={{ backgroundColor: "#203FC7", color: "white", paddingBlock: 0.93, paddingInline: 2 }} variant="contained">{isSubmitting ? "Saveing..." : "Save"}</Button>
 
         </Stack>

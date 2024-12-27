@@ -19,26 +19,60 @@ import { Visibility } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { axiosInstanceAdmin, BOOKING_URLS } from '../../../Services/END_POINTS/ADMIN/URLS';
+const StyledTableCell = styled(TableCell)(() => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: 'rgba(226, 229, 235, 1)',
+    color: 'rgba(30, 38, 62, 1)',
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+    color: '#333',
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(() => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: 'rgba(255, 255, 255, 1)',
+  },
+  '&:nth-of-type(even)': {
+    backgroundColor: 'rgba(248, 249, 251, 1)',
+  },
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
+
+interface Room {
+  roomNumber: string;
+}
+
+interface User {
+  userName: string;
+}
+
+interface Booking {
+  _id: string;
+  room: Room;
+  user: User;
+  startDate: number;
+  endDate: number;
+  totalPrice: number;
+}
+ const renderSkeletonRows = () =>
+    Array.from({ length: 5 }).map((_, index) => (
+      <StyledTableRow key={index}>
+        {Array.from({ length: 6 }).map((__, colIndex) => (
+          <StyledTableCell key={colIndex} align="center">
+            <Skeleton variant="text" width="80%" />
+          </StyledTableCell>
+        ))}
+      </StyledTableRow>
+    ));
 
 export default function BookingList() {
   const navigate = useNavigate();
 
-  interface Room {
-    roomNumber: string;
-  }
-
-  interface User {
-    userName: string;
-  }
-
-  interface Booking {
-    _id: string;
-    room: Room;
-    user: User;
-    startDate: number;
-    endDate: number;
-    totalPrice: number;
-  }
+  
 
   const [booking, setBooking] = useState<Booking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -64,54 +98,21 @@ export default function BookingList() {
     getBookingList(pageSize, currentPage);
   }, []);
 
-  const StyledTableCell = styled(TableCell)(() => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: 'rgba(226, 229, 235, 1)',
-      color: 'rgba(30, 38, 62, 1)',
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-      color: '#333',
-    },
-  }));
 
-  const StyledTableRow = styled(TableRow)(() => ({
-    '&:nth-of-type(odd)': {
-      backgroundColor: 'rgba(255, 255, 255, 1)',
-    },
-    '&:nth-of-type(even)': {
-      backgroundColor: 'rgba(248, 249, 251, 1)',
-    },
-    '&:last-child td, &:last-child th': {
-      border: 0,
-    },
-  }));
 
   const formatDate = (timestamp: number) => {
     const date = new Date(timestamp);
     return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   };
 
-  const handleViewDetails = (bookingId: string) => {
-    navigate(`/booking-details/${bookingId}`);
-  };
+  
   const handlePageChange = async (event: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
     await getBookingList(pageSize, page);
    
   };
 
-  const renderSkeletonRows = () =>
-    Array.from({ length: 5 }).map((_, index) => (
-      <StyledTableRow key={index}>
-        {Array.from({ length: 6 }).map((__, colIndex) => (
-          <StyledTableCell key={colIndex} align="center">
-            <Skeleton variant="text" width="80%" />
-          </StyledTableCell>
-        ))}
-      </StyledTableRow>
-    ));
-
+ 
   return (
     <Stack sx={{ overflow: 'hidden', width: '90vw' }}>
       <Box>
@@ -128,8 +129,9 @@ export default function BookingList() {
       )}
 
       <Box>
-        <TableContainer component={Paper} sx={{ boxShadow: 'none', border: 'none' }}>
+        <TableContainer component={Paper} sx={{ boxShadow: 'none', border: 'none', maxHeight:"78vh" }}>
         <Table
+        stickyHeader
       sx={{
         minWidth: 700,
         borderCollapse: 'collapse', // Ensures no gaps between cells
@@ -146,7 +148,6 @@ export default function BookingList() {
                 <StyledTableCell align="center">Start Date</StyledTableCell>
                 <StyledTableCell align="center">End Date</StyledTableCell>
                 <StyledTableCell align="center">User</StyledTableCell>
-                <StyledTableCell align="center">View</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -155,17 +156,12 @@ export default function BookingList() {
               ) : booking.length > 0 ? (
                 booking.map((row) => (
                   <StyledTableRow key={row._id}>
-                    <StyledTableCell align="center">{row.room.roomNumber}</StyledTableCell>
+                    <StyledTableCell align="center">{row?.room?.roomNumber}</StyledTableCell>
                     <StyledTableCell align="center">{row.totalPrice}</StyledTableCell>
                     <StyledTableCell align="center">{formatDate(row.startDate)}</StyledTableCell>
                     <StyledTableCell align="center">{formatDate(row.endDate)}</StyledTableCell>
                     <StyledTableCell align="center">{row.user.userName}</StyledTableCell>
-                    <StyledTableCell align="center">
-                      <Visibility
-                        sx={{ cursor: 'pointer', color: '#1976d2' }}
-                        onClick={() => handleViewDetails(row._id)}
-                      />
-                    </StyledTableCell>
+                    
                   </StyledTableRow>
                 ))
               ) : (

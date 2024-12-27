@@ -26,7 +26,6 @@
     "react-loading-indicators": "^1.0.0",
     "react-router-dom": "^7.0.2",
     "react-toastify": "^10.0.6",
-    "styled-components": "^6.1.13",
     "swiper": "^11.1.15"
   },
   "devDependencies": {

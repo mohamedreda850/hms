@@ -114,8 +114,8 @@ export default function Login() {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="start">
-                    {isPasswordVisable ? <IconButton aria-label="delete" onClick={handlePassword}> <VisibilityOffIcon /></IconButton>
-                      : <IconButton aria-label="delete" onClick={handlePassword}> <RemoveRedEyeIcon /></IconButton>}
+                    {isPasswordVisable  ?<IconButton aria-label="delete" onClick={handlePassword}> <RemoveRedEyeIcon /></IconButton> 
+                      : <IconButton aria-label="delete" onClick={handlePassword}> <VisibilityOffIcon /></IconButton>}
                   </InputAdornment>
                 ),
               }}
@@ -126,8 +126,8 @@ export default function Login() {
 
 
           </Stack>
-          <Button  type='submit' variant="contained" size="large" >
-            LogIn
+          <Button  type='submit' variant="contained" disabled={isSubmitting} size="large" sx={{ width: "100%", marginTop: "20px" }}>
+            {isSubmitting?"Login..." :'LogIn'}
           </Button>
 
         </form>

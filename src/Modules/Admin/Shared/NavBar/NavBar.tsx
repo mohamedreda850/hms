@@ -14,12 +14,14 @@ import { useContext, useEffect, useState } from 'react';
 export default function NavBar() {
  
 
-const [userName, setUseName] = useState([])
+
+const [userCall, setUseCall] = useState()
 const {userData} = useContext(AuthContext)
 useEffect(()=>{
   if (userData){
    
-   setUseName(userData.data.data.user.userName)
+ 
+   setUseCall(userData.data.data.user)
    console.log(userData.data.data.user.userName)
   }
   
@@ -32,9 +34,9 @@ useEffect(()=>{
     <Toolbar>
       
       <Box sx={{ flexGrow: 1 }} />
-      <Avatar alt={userName}  />
+      <Avatar src={userCall?.profileImage}   />
       <Typography variant='body2' sx={{marginLeft:1}}>
-      {userName}
+      {userCall?.userName}
       </Typography>
     </Toolbar>
   </AppBar>
