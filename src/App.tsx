@@ -137,7 +137,7 @@ function App() {
           element: <BookingPage />,
         },
         {
-          path: "explore-rooms/:id",
+          path: "explore-rooms/:roomId",
           element: <DetailsPage />,
         },
         {
