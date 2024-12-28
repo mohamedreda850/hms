@@ -64,6 +64,7 @@ export default function Explore() {
           <Grid2 container spacing={2}>
             {getRooms.map((room) => (
               <Grid2 size={{ md: 4, sm: 6, xs: 12 }} key={room._id}>
+                <Link to={`/explore-rooms/${room._id}`}>
                 <Stack>
                   {room.images ? (
                     <div style={{ position: "relative" }}>
@@ -146,6 +147,7 @@ export default function Explore() {
                     <img src={NotFound} alt="" />
                   )}
                 </Stack>
+                </Link>
               </Grid2>
             ))}
           </Grid2>
