@@ -5,17 +5,27 @@ const baseURL = "https://upskilling-egypt.com:3000/api/v0/admin";
 export const axiosInstanceAdminAuth = axios.create({ baseURL: baseURL });
 export const axiosInstanceAdmin = axios.create({
   baseURL: baseURL,
-  headers: {
-    Authorization: localStorage.getItem("HMSToken"),
-  },
+
 });
+axiosInstanceAdmin.interceptors.request.use((config)=>{
+config.headers.Authorization = localStorage.getItem('HMSToken')
+return config
+})
 export const AUTH_URL = {
   LOGIN: "/users/login",
   REGISTER: "/users",
-  FORGOT_PASSWORD : "/users/forgot-password",
-  RESET_PASSWORD: "users/reset-password",
+  FORGOT_PASSWORD: "/users/forgot-password",
+  RESET_PASSWORD: "/users/reset-password",
   CHANGE_PASSWORD: "/users/change-password",
+  USER_Profile: (id: string) => `/users/${id}`,
 };
+//ADD Users URLS 
+export const USERS_URL = {
+  GET_ALL_USERS: "/users",
+
+}
+
+
 export const ROOMS_URLS = {
   ADD_ROOM: "/rooms",
   GET_ROOM: (id: string) => `/rooms/${id}`,
@@ -29,20 +39,20 @@ export const BOOKING_URLS = {
   DELETE_BOOKING: (id: string) => `/booking/${id}`,
 };
 export const FACILITIES_URLS = {
-    ADD_FACILITY: "/room-facilities",
-    GET_FACILITY: (id: string) => `/room-facilities/${id}`,
-    GET_ALL_FACILITIES: "/room-facilities",
-    UPDATE_FACILITY: (id: string) => `/room-facilities/${id}`,
-    DELETE_FACILITY: (id: string) => `/room-facilities/${id}`,
+  ADD_FACILITY: "/room-facilities",
+  GET_FACILITY: (id: number) => `/room-facilities/${id}`,
+  GET_ALL_FACILITIES: "/room-facilities",
+  UPDATE_FACILITY: (id: number) => `/room-facilities/${id}`,
+  DELETE_FACILITY: (id: number) => `/room-facilities/${id}`,
 }
 
 export const ADS_URLS = {
-    ADD_ADS: "/ads",
-    GET_ADS: (id: string) => `/ads/${id}`,
-    GET_ALL_ADS: "/ads",
-    UPDATE_ADS: (id: string) => `/ads/${id}`,
-    DELETE_ADS: (id: string) => `/ads/${id}`,
+  ADD_ADS: "/ads",
+  GET_ADS: (id: string) => `/ads/${id}`,
+  GET_ALL_ADS: "/ads",
+  UPDATE_ADS: (id: string) => `/ads/${id}`,
+  DELETE_ADS: (id: string) => `/ads/${id}`,
 }
-export const Dashboard_URLS = {
-    GET_DASHBOARD: "/dashboard",
+export const DASHBOARD_URLS = {
+  GET_DASHBOARD: "/dashboard",
 }

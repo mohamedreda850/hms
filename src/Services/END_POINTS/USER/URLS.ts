@@ -6,7 +6,7 @@ export const axiosInstanceUserAuth = axios.create({ baseURL: baseURL });
 export const axiosInstanceUser = axios.create({
   baseURL: baseURL,
   headers: {
-    Authorization: localStorage.getItem("HMSToken"),
+    Authorization: `Bearer ${localStorage.getItem("HMSToken")}`
   },
 });
 

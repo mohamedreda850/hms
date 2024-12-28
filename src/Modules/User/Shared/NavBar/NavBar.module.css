@@ -1,0 +1,7 @@
+.link-decor{
+    text-decoration: none;
+    color: black;
+}
+:global(.active){
+    color: #3252DF;
+} 

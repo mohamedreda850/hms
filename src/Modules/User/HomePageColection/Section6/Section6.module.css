@@ -1,0 +1,130 @@
+:root {
+  --primary-star-color: #ffcc47;
+  --secondary-star-color: #b0b0b0;
+  --text-color: #000;
+  --designer-text-color: #b0b0b0;
+  --border-radius: 0.5rem;
+}
+.imgContainer {
+  margin-right: 60px;
+}
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem; /* 20px */
+}
+
+.image {
+  width: 28.56rem; /* 457px converted to rem (16px base font size) */
+  height: 36.31rem; /* 581px converted to rem */
+  border-radius: var(--border-radius);
+  object-fit: cover;
+}
+
+.contentContainer {
+  flex: 1;
+  padding-left: 1.25rem; /* 20px */
+}
+
+.title {
+  font-family: "Poppins", sans-serif;
+  font-size: 1.5rem; /* 24px */
+  font-weight: 600; /* Bold */
+  margin: 0;
+}
+
+.stars {
+  margin: 0.3125rem 0; /* 5px */
+}
+
+.starGold {
+  color: var(--primary-star-color);
+  font-size: 2.1875rem; /* 35px */
+}
+
+.starGray {
+  color: var(--secondary-star-color);
+  font-size: 2.1875rem; /* 35px */
+}
+
+.description {
+  font-family: "Poppins", sans-serif;
+  font-size: 2.25rem; /* 36px */
+  font-weight: 400;
+  color: var(--text-color);
+  margin: 0.3125rem 0; /* 5px */
+}
+
+.designer {
+  font-family: "Poppins", sans-serif;
+  font-size: 0.875rem; /* 14px */
+  color: var(--designer-text-color);
+  margin-top: 0.625rem; /* 10px */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .contentContainer {
+    padding-left: 0;
+    text-align: center;
+  }
+
+  .image {
+    max-width: 100%;
+    height: auto; /* Maintain aspect ratio */
+  }
+}
+.wrapper {
+  position: relative;
+  width: 80%;
+  margin: auto;
+}
+
+.swiperButton {
+  position: absolute;
+  z-index: 10;
+  color: blue;
+  font-size: 1.5rem;
+  transform: translate(-50%, -50%);
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.swiperButtonPrev {
+  position: absolute !important;
+  left: 65% !important;
+  top: 80% !important;
+  z-index: 10 !important;
+}
+.swiperButtonNext {
+  position: absolute !important;
+  right: 23% !important;
+  top: 80% !important;
+  z-index: 10 !important;
+}
+/* Media Query for Small Screens */
+@media (max-width: 768px) {
+  .swiperButtonPrev {
+    left: 40% !important;
+    display: block !important;
+  }
+  .swiperButton {
+    margin-top: 200px !important;
+  }
+  .swiperButtonNext {
+    right: 20% !important;
+  }
+  .imgContainer {
+    margin: auto !important;
+  }
+}
+.contentContainer {
+  line-height: 60px;
+}
