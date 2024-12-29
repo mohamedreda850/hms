@@ -7,6 +7,7 @@ import Grid from '@mui/material/Grid2';
 import Button from '@mui/material/Button';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { Container } from '@mui/material';
 
 interface dateData {
   startDate: string,
@@ -22,11 +23,11 @@ export default function Section1() {
 
   const onSubmit = (data: dateData) => {
     // console.log(data);
-    navigate(`/explore-all-rooms?startDate=${data.startDate}&endDate=${data.endDate}`)
+    navigate(`/explore-rooms?startDate=${data.startDate}&endDate=${data.endDate}`)
   }
   return (
     <>
-      <Box sx={{maxWidth: '1140px', minHeight: 'calc(100vh - 64px)', margin: {lg: '0 150px', md: '0 100px', sm: '0 0', xs: '0 0'}, padding: '0 20px'}}>
+      <Container sx={{ minHeight: 'calc(100vh - 64px)', padding: '0 20px'}}>
         <Grid container spacing={2}>
           <Grid size={{lg: 6, md: 6, sm: 6, xs: 12}}>
             <Box component="section" sx={{marginTop: '70px'}}>
@@ -56,7 +57,7 @@ export default function Section1() {
             </Box>
           </Grid>
         </Grid>
-      </Box>
+      </Container>
     </>
   )
 }

@@ -13,13 +13,13 @@ export default function AuthContextProvider(props ) {
     
 
       try {
-        const decodedToken = localStorage.getItem("HMSToken");
-    
-      const encodedToken = jwtDecode(decodedToken);
-        const response = await axiosInstanceAdmin.get(AUTH_URL.USER_Profile(encodedToken._id));  
+        const token = localStorage.getItem("HMSToken");
+    if(token){
+      const decoded = jwtDecode(token);
+        const response = await axiosInstanceAdmin.get(AUTH_URL.USER_Profile(decoded._id));  
         console.log(response);
         
-      setUserData(response)
+      setUserData(response)}
       } catch (error) {
         console.log(error);
         
@@ -27,7 +27,9 @@ export default function AuthContextProvider(props ) {
     
   };
 
-  
+  useEffect(()=>{
+    saveLoginData()
+  },[])
 
   return (
     <AuthContext.Provider value={{ userData  , saveLoginData , }}>

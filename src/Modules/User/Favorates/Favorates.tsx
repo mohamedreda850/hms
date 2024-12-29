@@ -32,10 +32,10 @@ export default function Favorates() {
     
         try {
           const res = await axiosInstanceUser.get(FAVORITE_ROOMS_URLS.GET_ALL_FAVORITE_ROOMS)
-          // console.log(res?.data?.data?.favoriteRooms[0].rooms[0].images[0]);
+          
           console.log(res?.data?.data?.favoriteRooms[0].rooms)
           setFavRoomsImg(res?.data?.data?.favoriteRooms[0].rooms);
-          // console.log(favRooms);
+          
     
         } catch (error) {
           console.log(error);

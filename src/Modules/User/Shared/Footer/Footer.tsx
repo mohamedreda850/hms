@@ -4,7 +4,7 @@ import logoImg from "./../../../../assets/images/Staycation..png"
 import Grid from '@mui/material/Grid2';
 
 export default function Footer() {
-  return (<><Divider />
+  return (<><Divider sx={{paddingY:"20px"}}/>
     <Grid container rowSpacing={1} sx={{marginTop:3 , padding:5}} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
       
       <Grid size={{ xs: 8, md: 6 ,lg:3 ,}} sx={{width:'100%', }} >
