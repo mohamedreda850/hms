@@ -1,5 +1,5 @@
 
-import { Box, Grid } from '@mui/material';
+import { Box, Container, Grid } from '@mui/material';
 import { Typography } from '@mui/material';
 
 import img1 from '../../../../assets/images/sec3-1.png'
@@ -8,6 +8,7 @@ import img3 from '../../../../assets/images/sec3-3.png'
 import img4 from '../../../../assets/images/sec3-4.png'
 export default function Section4() {
   return <>
+  <Container sx={{marginTop:'70px'}}>
   <Typography sx={{fontSize:'2rem',fontWeight:'500',lineHeight:'36px', marginBottom:'20px'}}>
   Houses with beauty backyard
   </Typography>
@@ -125,5 +126,6 @@ export default function Section4() {
       </Grid>
     </Grid>
   </div>
+  </Container>
   </>
 }
