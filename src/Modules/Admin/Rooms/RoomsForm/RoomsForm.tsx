@@ -278,6 +278,7 @@ function handleImageChange(e) {
 
             />
           </Button>
+         
           <img src={imgeFile} alt="" style={{height:300 , objectFit:"contain"}}/>
         </Stack>
         <Divider sx={{ my: 50 }} orientation="horizontal" flexItem />
