@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-import 'swiper/swiper-bundle.css'
+
 
 
 import styles from "./section6.module.css";
