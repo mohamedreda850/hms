@@ -154,7 +154,9 @@ function App() {
         },
         {
           path:'booking-page/:id',
-        }
+        element:<BookingPage/>
+        },
+       
       ],
     },
   ]);

@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid2';
 import Divider from '@mui/material/Divider';
 import { toast } from 'react-toastify';
-import { axiosInstanceUser, ROOM_COMMENTS_URLS, ROOM_REVIEWS_URLS, ROOMS_URL } from '../../../Services/END_POINTS/USER/URLS'
+import { axiosInstanceUser, BOOKING_URLS, ROOM_COMMENTS_URLS, ROOM_REVIEWS_URLS, ROOMS_URL } from '../../../Services/END_POINTS/USER/URLS'
 import { AuthContext } from '../../../Context/AuthContext';
 
 interface rateData {
@@ -24,28 +24,57 @@ interface commentData {
   roomId: string,
   comment: string
 }
-
+interface BookingDataInterface{
+  roomId: string,
+  startDate: string,
+  endDate: string,
+  totalPrice: number
+}
 export default function DetailsPage() {
   const [room, setRoom] = useState(null)
   const { roomId } = useParams()
+
   const [value, setValue] = useState<number | null>(2);
   const navigate = useNavigate()
   // Payment===============================
-  const { register, handleSubmit, } = useForm({ defaultValues: { roomId: roomId } });
+
 
   const { register: registerRate, handleSubmit: handleRateSubmit, setValue: setValueRate } = useForm({ defaultValues: { roomId: roomId } });
   const { register: registerComment, handleSubmit: handleCommentSubmit } = useForm({ defaultValues: { roomId: roomId } });
   const { userData } = useContext(AuthContext)
+  const { register, handleSubmit, formState: { errors, isSubmitting }  } = useForm({ defaultValues: { room: roomId,  } });
   const getRoom = async () => {
     try {
       const res = await axiosInstanceUser.get(ROOMS_URL.GET_ROOM(roomId))
-      console.log(res);
+      console.log(res.data.data.room);
 
       setRoom(res?.data?.data?.room)
+      setValue("totalPrice", res?.data?.data?.room?.price)
+
     } catch (error) {
       console.log(error);
     }
   }
+  const bookingSubmit = async (data: any) => {
+    const bookingData :BookingDataInterface ={
+      ...data,
+      totalPrice :room?.price 
+    }
+    console.log(bookingData);
+    try {
+     
+
+    const res = await axiosInstanceUser.post(BOOKING_URLS.BOOKING, bookingData)
+    console.log(res);
+    navigate('/booking-page/'+res?.data?.data?.booking?._id)
+    } catch (error) {
+      console.log(error);
+      
+    }
+    
+  }
+
+
 
   const rateRoom = async (data: rateData) => {
     try {
@@ -116,7 +145,7 @@ export default function DetailsPage() {
             <Typography variant='h4' sx={{ fontFamily: 'Poppins', fontWeight: 500, fontSize: '36px', color: '#B0B0B0' }}><span style={{ color: '#1ABC9C' }}>${room?.price}</span> per night</Typography>
             <Typography variant='body1' sx={{ fontFamily: 'Poppins', fontWeight: 400, fontSize: '16px', color: '#FF1612' }}>Discount {room?.discount}% Off </Typography>
             <Box sx={{ paddingTop: '70px' }}>
-              <form>
+              <form onSubmit={handleSubmit(bookingSubmit)}>
                 <Typography sx={{ fontFamily: 'Poppins', fontWeight: 400, fontSize: '16px', color: '#152C5B' }} variant="body1" component="h2">Pick a Date</Typography>
                 <Box className="box" sx={{ display: 'flex' }}>
                   <img src={img2} alt="" />
