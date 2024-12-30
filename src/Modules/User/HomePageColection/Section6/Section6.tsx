@@ -7,7 +7,7 @@ import "swiper/css/navigation";
 import styles from "./section6.module.css";
 import img from "../../../../assets/images/carousel.png";
 
-export default function SwiperWithCards() {
+export default function Section6() {
   const cardData = [
     {
       title: "Happy Family",
@@ -39,7 +39,7 @@ export default function SwiperWithCards() {
   const nextRef = useRef(null);
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} style={{paddingBlock: "70px"}}>
       {/* Custom Navigation Buttons */}
       <button
         ref={prevRef}

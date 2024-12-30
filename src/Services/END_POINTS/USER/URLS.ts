@@ -9,7 +9,10 @@ export const axiosInstanceUser = axios.create({
     Authorization: `Bearer ${localStorage.getItem("HMSToken")}`
   },
 });
-
+axiosInstanceUser.interceptors.request.use((config)=>{
+config.headers.Authorization = localStorage.getItem('HMSToken')
+return config
+})
   export const ROOMS_URL ={
     GET_ROOM: (id: string) => `/rooms/${id}`,
     GET_ALL_ROOMS: "/rooms/available",

@@ -1,0 +1,16 @@
+.box {
+    margin-top: 10px;
+}
+.box .inputs {
+    background-color: #F5F6F8;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+.box .inputs input {
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0 10px;
+}

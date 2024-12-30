@@ -17,10 +17,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../../Context/AuthContext';
 
 
-import { axiosInstanceUser } from '../../../../Services/END_POINTS/USER/URLS';
-import { AUTH_URL, axiosInstanceAdmin } from '../../../../Services/END_POINTS/ADMIN/URLS';
+
 import { Stack } from '@mui/material';
-import { set } from 'react-hook-form';
 
 
 export default function NavBar() {
@@ -36,7 +34,7 @@ const [loginData, setLoginData] = React.useState()
   };
 
   const pages = [<Link className={`${styles["link-decor"]}`} to="/">Home</Link>, <Link className={`${styles["link-decor"]}`} to="/explore-rooms">Explore</Link>, <Button onClick={() => { navigate("/auth/register") }} variant="contained">Register</Button>, <Button onClick={() => { navigate("/auth/login") }} variant="contained">  Login</Button>];
-  const loginPages = [<Link className={`${styles["link-decor"]}`} to="/">Home</Link>, <Link className={`${styles["link-decor"]}`} to="/explore-rooms">Explore</Link>, <Link className={`${styles["link-decor"]}`} to="/explore-rooms">Favorits</Link>]
+  const loginPages = [<Link className={`${styles["link-decor"]}`} to="/">Home</Link>, <Link className={`${styles["link-decor"]}`} to="/explore-rooms">Explore</Link>, <Link className={`${styles["link-decor"]}`} to="/favorites">Favorits</Link>]
   const settings = [<Button onClick={logOut} variant='text'>Log out</Button>];
 
 
