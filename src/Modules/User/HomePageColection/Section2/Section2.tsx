@@ -170,7 +170,7 @@ const navigate = useNavigate()
     
   return (
     <>
-    <Container>
+    <Container sx={{marginTop:"20px"}}>
     <Typography variant="h5" gutterBottom>
     Most popular ads
     </Typography>

@@ -27,7 +27,7 @@ export default function Section1() {
   }
   return (
     <>
-      <Container sx={{ minHeight: 'calc(100vh - 64px)', padding: '0 20px'}}>
+      <Container sx={{ minHeight: 'calc(92vh - 64px)', padding: '0 20px'}}>
         <Grid container spacing={2}>
           <Grid size={{lg: 6, md: 6, sm: 6, xs: 12}}>
             <Box component="section" sx={{marginTop: '70px'}}>
