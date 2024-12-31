@@ -1,0 +1,19 @@
+.room-details .room-image {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+.room-details .room-image img {
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+}
+.room-details .room-image img:first-child {
+    grid-column: 1/3;
+    grid-row: 1/3;
+}
+.room-details .continue-book {
+    border: 1px solid #E5E5E5;
+    /* padding: 40px; */
+    border-radius: 15px;
+}

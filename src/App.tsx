@@ -133,11 +133,15 @@ function App() {
           element: <Explore />,
         },
         {
+          path: "explore-rooms/:startDate/:endDate",
+          element: <Explore />,
+        },
+        {
           path: "booking-page/:id",
           element: <BookingPage />,
         },
         {
-          path: "explore-rooms/:id",
+          path: "explore-rooms/:roomId",
           element: <DetailsPage />,
         },
         {
@@ -148,6 +152,11 @@ function App() {
           path: "change-password",
           element: <ChangePassword />,
         },
+        {
+          path:'booking-page/:id',
+        element:<BookingPage/>
+        },
+       
       ],
     },
   ]);

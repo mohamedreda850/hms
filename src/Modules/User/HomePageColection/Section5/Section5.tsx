@@ -32,8 +32,8 @@ export default function Section5() {
 
   return (
     <>
-      <Container maxWidth="lg" className="sec5">
-        <Stack sx={{ marginBlock: "20px" }}>
+      <Container maxWidth="lg" className="sec5" sx={{ marginTop: "100px" }}>
+        <Stack >
           <Typography sx={{ fontSize: "2rem", color: "#152C5B" }}>
             Ads
           </Typography>
@@ -68,7 +68,7 @@ export default function Section5() {
                           right: "0",
                           position: "absolute",
                           background: "#FF498B",
-                          borderTopLeftRadius: "15px",
+                          borderBottomLeftRadius: "15px",
                           borderTopRightRadius: "15px",
                         }}
                       >
